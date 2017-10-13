@@ -4,8 +4,6 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Summary from './components/Summary';
 
-import './App.css';
-
 const appStyles = {
   height: '100%',
   display: 'flex',

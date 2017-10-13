@@ -21,12 +21,21 @@ const headerRowStyles = {
   justifyContent: 'space-between' as 'space-between',
   height: '3.5%'
 };
+const timeContainerStyles = {
+  color: '#8e8df3',
+  borderBottom: 'solid 1px #8e8df3',
+  display: 'inline-block',
+  boxSizing: 'border-box',
+  height: '100%',
+  marginLeft: '8px'
+};
 const imgStyles = {
   height: '100%',
   verticalAlign: 'top'
 };
 const inputStyles = {
   border: 'none',
+  width: '100%',
   fontSize: '20px',
   fontWeight: 'bold' as 'bold'
 };
@@ -42,7 +51,7 @@ interface State {
   pollTime: number;
   questionText: string;
   answers: string[];
-  correctIdx: number;
+  correctAns: boolean[];
   pollRunning: boolean;
 }
 
@@ -52,7 +61,7 @@ class CreatePoll extends React.Component<{}, State> {
       pollTime: 1,
       questionText: '',
       answers: ['', ''],
-      correctIdx: 0,
+      correctAns: [false, false],
       pollRunning: false
     });
   }
@@ -62,31 +71,40 @@ class CreatePoll extends React.Component<{}, State> {
       questionText: e.target.value
     });
   }
-  updateAnswerText(e: any, i: number) {
+  updateAnswerText(i: number, e: any) {
     const newAnswers = this.state.answers;
     newAnswers[i] = e.target.value;
     this.setState({
       answers: newAnswers
     });
   }
-  setCorrectAnswer(i: number) {
+  toggleCorrectAnswer(i: number) {
+    const correctAns = this.state.correctAns;
+    correctAns[i] = !correctAns[i];
     this.setState({
-      correctIdx: i
+      correctAns: correctAns
     });
   }
   addAnotherAnswer() {
     const newAnswers = this.state.answers;
+    const correctAns = this.state.correctAns;
     newAnswers.push('');
+    correctAns.push(false);
     this.setState({
-      answers: newAnswers
+      answers: newAnswers,
+      correctAns: correctAns
     });
   }
-  startPoll() {
-    console.log('Start the poll!');
+  togglePoll() {
+    this.setState({pollRunning: !this.state.pollRunning});
   }
   checkUnderstanding() {
-    console.log('Check understanding!');
-    this.startPoll();
+    this.setState({
+      questionText: 'Do you understand?',
+      answers: ['Yes', 'No'],
+      correctAns: [false, false]
+    });
+    this.togglePoll();
   }
 
   render() {
@@ -95,7 +113,8 @@ class CreatePoll extends React.Component<{}, State> {
         <div style={headerRowStyles}>
           <div>POLLS & QUIZZES</div>
           <div>
-            <img src={clockIcon} style={imgStyles}/> {this.state.pollTime} MIN
+            <img src={clockIcon} style={imgStyles}/>
+            <div style={timeContainerStyles}> {this.state.pollTime} MIN</div>
           </div>
         </div>
 
@@ -109,15 +128,15 @@ class CreatePoll extends React.Component<{}, State> {
         <div style={answerContainerStyles}>
           {
             this.state.answers.map((answerText, i) => <PollAnswer answerText={answerText}
-                                                                  isCorrect={i === this.state.correctIdx}
+                                                                  isCorrect={this.state.correctAns[i]}
                                                                   setAnswerText={this.updateAnswerText.bind(this, i = i)}
-                                                                  setCorrect={this.setCorrectAnswer.bind(this, i)} />)
+                                                                  setCorrect={this.toggleCorrectAnswer.bind(this, i)} />)
           }
         </div>
 
         <div style={answerContainerStyles}>
           <Button height='41.5%' backgroundColor='#e7e7e7' textColor='#5f5f5f' buttonText='ADD ANOTHER ANSWER' handleButtonClick={this.addAnotherAnswer.bind(this)} />
-          <Button height='41.5%' backgroundColor='#bbbbbb' textColor='#ffffff' buttonText='START POLL' handleButtonClick={this.startPoll.bind(this)} />
+          <Button height='41.5%' backgroundColor='#bbbbbb' textColor='#ffffff' buttonText={this.state.pollRunning ? 'END POLL' : 'START POLL'} handleButtonClick={this.togglePoll.bind(this)} />
         </div>
 
         <div style={{height: '1px', width: '100%', backgroundColor: 'black'}} />

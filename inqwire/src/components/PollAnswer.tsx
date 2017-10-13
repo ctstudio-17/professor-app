@@ -1,5 +1,8 @@
 import * as React from 'react';
 
+const starIcon = require('../assets/star-icon.svg');
+const starIconFilled = require('../assets/star-icon-filled.svg');
+
 const answerBoxStyles = {
   width: '100%',
   height: '41.5%',
@@ -36,7 +39,6 @@ const correctContainerStyles = {
 };
 const starDiv = {
   cursor: 'pointer',
-  border: 'solid 1px black',
   width: '54.3%',
   height: '32.1%'
 };
@@ -54,9 +56,12 @@ class CreatePoll extends React.Component<Props, {}> {
     return (
       <div style={answerBoxStyles}>
         <div style={dotStyles}></div>
-        <input style={inputStyles} placeholder='Write an answer' />
+        <input type='text' placeholder='Write an answer' style={inputStyles}
+               value={this.props.answerText} onChange={this.props.setAnswerText} />
         <div style={correctContainerStyles}>
-          <div style={{...starDiv, backgroundColor: this.props.isCorrect ? 'yellow' : ''}} onClick={this.props.setCorrect} />
+          <div style={starDiv} onClick={this.props.setCorrect}>
+            <img src={this.props.isCorrect ? starIconFilled : starIcon} />
+          </div>
           <span>Correct</span>
         </div>
       </div>
