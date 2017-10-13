@@ -13,11 +13,7 @@ const answerBoxStyles = {
   justifyContent: 'space-between' as 'space-between'
 };
 const dotStyles = {
-  marginLeft: '3.8%',
-  width: '3.4%',
-  height: '26.8%',
-  border: 'solid 2px #5f5f5f',
-  borderRadius: '100%'
+  marginLeft: '3.8%'
 };
 const inputStyles = {
   border: 'none',
@@ -44,6 +40,7 @@ const starDiv = {
 };
 
 interface Props {
+  letter: string;
   answerText: string;
   isCorrect: boolean;
 
@@ -55,7 +52,7 @@ class CreatePoll extends React.Component<Props, {}> {
   render() {
     return (
       <div style={answerBoxStyles}>
-        <div style={dotStyles}></div>
+        <div style={dotStyles}>{this.props.letter}.</div>
         <input type='text' placeholder='Write an answer' style={inputStyles}
                value={this.props.answerText} onChange={this.props.setAnswerText} />
         <div style={correctContainerStyles}>
