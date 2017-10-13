@@ -5,7 +5,7 @@ import PollAnswer from './PollAnswer';
 
 const clockIcon = require('../assets/clock-icon.svg');
 const pollContainerStyles = {
-  width: '35.2%',
+  width: '36.2%',
   height: '100%',
   padding: '2%',
   boxSizing: 'border-box',
@@ -43,7 +43,7 @@ const answerContainerStyles = {
   display: 'flex',
   flexDirection: 'column' as 'column',
   justifyContent: 'space-between' as 'space-between',
-  height: '24.5%',
+  height: '41.1%',
   overflowY: 'auto' as 'auto'
 };
 
@@ -60,8 +60,8 @@ class CreatePoll extends React.Component<{}, State> {
     this.setState({
       pollTime: 1,
       questionText: '',
-      answers: ['', ''],
-      correctAns: [false, false],
+      answers: ['', '', '', ''],
+      correctAns: [false, false, false, false],
       pollRunning: false
     });
   }
@@ -101,8 +101,8 @@ class CreatePoll extends React.Component<{}, State> {
   checkUnderstanding() {
     this.setState({
       questionText: 'Do you understand?',
-      answers: ['Yes', 'No'],
-      correctAns: [false, false]
+      answers: ['Yes', 'No', '', ''],
+      correctAns: [false, false, false, false]
     });
     this.togglePoll();
   }
@@ -134,14 +134,14 @@ class CreatePoll extends React.Component<{}, State> {
           }
         </div>
 
-        <div style={answerContainerStyles}>
+        <div style={{...answerContainerStyles, height: '19.2%'}}>
           <Button height='41.5%' backgroundColor='#e7e7e7' textColor='#5f5f5f' buttonText='ADD ANOTHER ANSWER' handleButtonClick={this.addAnotherAnswer.bind(this)} />
           <Button height='41.5%' backgroundColor='#bbbbbb' textColor='#ffffff' buttonText={this.state.pollRunning ? 'END POLL' : 'START POLL'} handleButtonClick={this.togglePoll.bind(this)} />
         </div>
 
         <div style={{height: '1px', width: '100%', backgroundColor: 'black'}} />
 
-        <div style={{...answerContainerStyles, height: '17.7%'}}>
+        <div style={{...answerContainerStyles, height: '13.7%'}}>
           <div>COMPREHENSION POLL</div>
           <Button height='57.3%' backgroundColor='#8e8df3' textColor='#ffffff' buttonText='CHECK UNDERSTANDING' handleButtonClick={this.checkUnderstanding.bind(this)} />
         </div>

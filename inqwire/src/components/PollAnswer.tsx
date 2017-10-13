@@ -5,7 +5,7 @@ const starIconFilled = require('../assets/star-icon-filled.svg');
 
 const answerBoxStyles = {
   width: '100%',
-  height: '41.5%',
+  height: '20.8%',
   border: 'solid 1px black',
   boxSizing: 'border-box',
   display: 'flex',
