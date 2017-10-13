@@ -19,7 +19,7 @@ interface State {
 class App extends React.Component<{}, State> {
   componentWillMount() {
     this.setState({
-      currPage: 'dashboard'
+      currPage: 'summary'
     });
   }
   render() {
