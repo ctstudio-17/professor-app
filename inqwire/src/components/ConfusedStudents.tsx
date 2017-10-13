@@ -63,9 +63,9 @@ class ConfusingStudents extends React.Component<{}, State> {
           <img src={profAvatar} />
         </div>
         <div style={firstLineStyles}>
-          {this.state.numConfusedStudents.length} student{this.state.numConfusedStudents.length === 1 ? '' : 's'} 
+          {this.state.numConfusedStudents.length} student{this.state.numConfusedStudents.length === 1 ? '' : 's'}
         </div>
-        <div style={secondLineStyles}> are confused</div>
+        <div style={secondLineStyles}> {this.state.numConfusedStudents.length === 1 ? 'is' : 'are'} confused</div>
         <PigmentBar numConfusedStudents={this.state.numConfusedStudents.length} numTotalStudents={this.state.numTotalStudents} />
       </div>
     );
