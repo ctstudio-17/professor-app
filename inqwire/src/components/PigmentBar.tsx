@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-var ProgressBar = require('progressbar.js');
+const ProgressBar = require('progressbar.js');
 
 const divStyles = {
   padding: '2px',
@@ -8,7 +8,7 @@ const divStyles = {
   height: '30px',
 };
 
-const progressSetting = {
+const progressSettings = {
   strokeWidth: 4,
   easing: 'easeInOut',
   duration: 1400,
@@ -24,8 +24,8 @@ const progressSetting = {
 };
 
 interface Props {
-  confusing_number: number;
-  student_number: number;
+  numConfusedStudents: number;
+  numTotalStudents: number;
 }
 
 interface State {
@@ -34,20 +34,19 @@ interface State {
 
 class PigmentBar extends React.Component<Props, State> {
   componentDidMount() {
-    this.setState({bar: new ProgressBar.Line('#bar-container', progressSetting)});
+    this.setState({bar: new ProgressBar.Line('#bar-container', progressSettings)});
     // this.state.bar.path.style.strokeLinecap = 'round';
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    var ratio = this.props.confusing_number / this.props.student_number;
-    console.log(this.props.student_number);
+    var ratio = this.props.numConfusedStudents / this.props.numTotalStudents;
     this.state.bar.animate(ratio);  // Number from 0.0 to 1.0
   }
 
   render() {
     return (
       <div >
-        <div id="bar-container" style={divStyles}></div>
+        <div id='bar-container' style={divStyles}></div>
       </div>
     );
   }

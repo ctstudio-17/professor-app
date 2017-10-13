@@ -6,8 +6,9 @@ const containerStyles = {
   backgroundColor: '#f9f9f9',
   border: `solid 7px ${lavendar}`,
   position: 'relative' as 'relative',
-  width: '60.6%',
-  height: '74.4%'
+  width: '100%',
+  height: '100%',
+  boxSizing: 'border-box'
 };
 const slideStyles = {
   width: '100%',
