@@ -9,8 +9,6 @@ interface Props {
 
 class Button extends React.Component<Props, {}> {
   render() {
-    // const pollOptions = ['Q:', 'a)', 'b)', 'c)', 'd)'].map((s: string) => <div className='create-poll-option'>{s}</div>);
-
     return (
       <div className='button' onClick={this.props.handleButtonClick}>
         {this.props.buttonText}

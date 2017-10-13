@@ -1,16 +1,20 @@
 import * as React from 'react';
 
-// import CreatePoll from './CreatePoll';
+import CreatePoll from './CreatePoll';
 import PlaceholderSlide from './PlaceholderSlide';
 
 const dashboardStyles = {
   padding: '1.5%',
-  flexGrow: 1,
+  height: '91.8%',
   display: 'flex',
   flexDirection: 'column' as 'column'
 };
 const rowStyles = {
   display: 'flex',
+  justifyContent: 'space-between' as 'space-between'
+};
+const firstRowStyles = {
+  height: '67.5%'
 };
 
 interface State {
@@ -27,7 +31,8 @@ class Dashboard extends React.Component<{}, State> {
   render() {
     return (
       <div style={dashboardStyles}>
-        <div style={rowStyles}>
+        <div style={{...rowStyles, ...firstRowStyles}}>
+          <CreatePoll />
           <PlaceholderSlide slideImageSrc={this.state.slideImageSrc} />
         </div>
         <div style={rowStyles}>

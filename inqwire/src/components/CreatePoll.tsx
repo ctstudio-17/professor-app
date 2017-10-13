@@ -1,6 +1,10 @@
 import * as React from 'react';
 
-import './styles/CreatePoll.css';
+const pollContainerStyles = {
+  width: '35.2%',
+  height: '100%',
+  border: 'solid 1px black'
+};
 
 interface State {
   pollTime: number;
@@ -21,7 +25,7 @@ class CreatePoll extends React.Component<{}, State> {
 
   render() {
     return (
-      <div>
+      <div style={pollContainerStyles}>
 
       </div>
     );
