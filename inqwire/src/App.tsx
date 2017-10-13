@@ -4,8 +4,6 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Summary from './components/Summary';
 
-import './App.css';
-
 const appStyles = {
   height: '100%',
   display: 'flex',
@@ -22,11 +20,20 @@ class App extends React.Component<{}, State> {
       currPage: 'summary'
     });
   }
+
+  startLecture() {
+    this.setState({currPage: 'dashboard'});
+  }
+
+  endLecture() {
+    this.setState({currPage: 'summary'});
+  }
+
   render() {
     return (
       <div style={appStyles}>
         <Header />
-        {this.state.currPage === 'dashboard' ? <Dashboard /> : <Summary />}
+        {this.state.currPage === 'dashboard' ? <Dashboard endLecture={this.endLecture.bind(this)} /> : <Summary />}
       </div>
     );
   }
