@@ -1,4 +1,5 @@
 import * as React from 'react';
+import fire from './firebase';
 
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
@@ -24,17 +25,17 @@ interface State {
 
 class App extends React.Component<{}, State> {
   componentWillMount() {
-    this.setState({
-      currPage: 'dashboard'
-    });
+    this.startLecture();
   }
 
   startLecture() {
     this.setState({currPage: 'dashboard'});
+    fire.database().ref('lectures/1').update({'in_progress': true});
   }
 
   endLecture() {
     this.setState({currPage: 'summary'});
+    fire.database().ref('lectures/1').update({'in_progress': false});
   }
 
   render() {
