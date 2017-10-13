@@ -1,13 +1,11 @@
 import * as React from 'react';
 
 const RatingResultsStyles = {
-  width: '29.3%',
-  height: '44.9%',
+  width: '100%',
+  height: '100%',
   padding: '2%',
   boxSizing: 'border-box',
   border: 'solid 1px black',
-  display: 'flex',
-  flexDirection: 'column' as 'column',
   justifyContent: 'space-between' as 'space-between'
 };
 
@@ -50,7 +48,7 @@ class RatingResults extends React.Component<{}, {}> {
   render() {
     return (
     <div style={RatingResultsStyles}>
-        <p style = {{width: "3.8%", height: "41.2%"}}> Lecture Rating </p>        
+        <p> Lecture Rating </p>        
     </div>
       
     );

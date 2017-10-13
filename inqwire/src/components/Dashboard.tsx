@@ -6,7 +6,6 @@ import ConfusedStudents from './ConfusedStudents';
 import EndLecture from './EndLecture';
 
 const dashboardStyles = {
-  padding: '1.5%',
   height: '91.8%',
   display: 'flex',
   flexDirection: 'column' as 'column'

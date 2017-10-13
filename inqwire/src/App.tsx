@@ -17,7 +17,7 @@ interface State {
 class App extends React.Component<{}, State> {
   componentWillMount() {
     this.setState({
-      currPage: 'summary'
+      currPage: 'dashboard'
     });
   }
 
@@ -33,7 +33,9 @@ class App extends React.Component<{}, State> {
     return (
       <div style={appStyles}>
         <Header />
-        {this.state.currPage === 'dashboard' ? <Dashboard endLecture={this.endLecture.bind(this)} /> : <Summary />}
+        <div style={{padding: "1.5%", boxSizing: "border-box"}}>
+          {this.state.currPage === 'dashboard' ? <Dashboard endLecture={this.endLecture.bind(this)} /> : <Summary />}
+        </div>
       </div>
     );
   }
