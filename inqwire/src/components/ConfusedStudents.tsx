@@ -28,7 +28,7 @@ interface State {
   numTotalStudents: number;
 }
 
-class ConfusingStudents extends React.Component<{},State> {
+class ConfusingStudents extends React.Component<{}, State> {
   constructor() {
     super();
     let studentsRef = fire.database().ref('classes/1/students');
@@ -42,7 +42,7 @@ class ConfusingStudents extends React.Component<{},State> {
     };
   }
 
-  componentWillMount(){
+  componentWillMount() {
     /* Create reference to messages in Firebase Database */
     let confusionsRef = fire.database().ref('lectures/1/confusions');
     confusionsRef.on('child_added', (snapshot: any) => {

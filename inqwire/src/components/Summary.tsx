@@ -3,7 +3,7 @@ import * as React from 'react';
 import RatingResults from './RatingResults';
 import FeedbackResults from './FeedbackResults';
 import ConfusionResults from './ConfusionResults';
-import PollResults from './PollResults';
+import PollResultsSummary from './PollResultsSummary';
 
 const rowStyles = {
   display: 'flex',
@@ -34,7 +34,7 @@ class Summary extends React.Component<{}, {}> {
             <FeedbackResults />
           </div>
           <div style={{width: '60.9%'}}>
-            <PollResults />
+            <PollResultsSummary />
           </div>
         </div>
       </div>
