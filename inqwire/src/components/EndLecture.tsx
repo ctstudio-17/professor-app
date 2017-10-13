@@ -83,7 +83,7 @@ class EndLecture extends React.Component<Props, State> {
   }
 
   updateTime() {
-    const minutes = this.state.minutes + Math.floor(this.state.seconds / 60);
+    const minutes = this.state.minutes + Math.floor((this.state.seconds + 1) / 60);
     this.setState({
       minutes: minutes,
       seconds: (this.state.seconds + 1) % 60
