@@ -26,11 +26,14 @@ const colStyles = {
   width: '62.4%'
 };
 
+interface Props {
+  endLecture: any;
+}
 interface State {
   slideImageSrc: any;
 }
 
-class Dashboard extends React.Component<{}, State> {
+class Dashboard extends React.Component<Props, State> {
   componentWillMount() {
     this.setState({
       slideImageSrc: require('../assets/sample-slide.png')
@@ -50,7 +53,7 @@ class Dashboard extends React.Component<{}, State> {
               <ConfusedStudents />
             </div>
             <div style={{height: '12.0%'}}>
-              <EndLecture />
+              <EndLecture endLecture={this.props.endLecture} />
             </div>
           </div>
         </div>

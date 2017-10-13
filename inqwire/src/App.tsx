@@ -20,11 +20,20 @@ class App extends React.Component<{}, State> {
       currPage: 'dashboard'
     });
   }
+
+  startLecture() {
+    this.setState({currPage: 'dashboard'});
+  }
+
+  endLecture() {
+    this.setState({currPage: 'summary'});
+  }
+
   render() {
     return (
       <div style={appStyles}>
         <Header />
-        {this.state.currPage === 'dashboard' ? <Dashboard /> : <Summary />}
+        {this.state.currPage === 'dashboard' ? <Dashboard endLecture={this.endLecture.bind(this)} /> : <Summary />}
       </div>
     );
   }

@@ -23,10 +23,14 @@ const subHeaderStyles = {
   letterSpacing: '1.8px'
 };
 
-class EndLecture extends React.Component<{}, {}> {
+interface Props {
+  endLecture: any;
+}
+
+class EndLecture extends React.Component<Props, {}> {
   render() {
     return (
-      <div style={containerStyles}>
+      <div style={containerStyles} onClick={this.props.endLecture}>
         <div style={headerStyles}>Lecture In Progress</div>
         <div style={subHeaderStyles}>CLICK TO END PRESENTATION</div>
       </div>
