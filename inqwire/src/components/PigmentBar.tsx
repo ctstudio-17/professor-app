@@ -6,7 +6,7 @@ const divStyles = {
   padding: '2px',
   width: '100%',
   height: '30px',
-}
+};
 
 const progressSetting = {
   strokeWidth: 4,
@@ -28,12 +28,20 @@ interface Props {
   student_number: number;
 }
 
-class PigmentBar extends React.Component<Props, {}> {
+interface State {
+  bar: any;
+}
+
+class PigmentBar extends React.Component<Props, State> {
   componentDidMount() {
-    var bar = new ProgressBar.Line('#bar-container', progressSetting);
-    bar.path.style.strokeLinecap = 'round';
-    var ratio = this.props.confusing_number/this.props.student_number;
-    bar.animate(ratio);  // Number from 0.0 to 1.0
+    this.setState({bar: new ProgressBar.Line('#bar-container', progressSetting)});
+    // this.state.bar.path.style.strokeLinecap = 'round';
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    var ratio = this.props.confusing_number / this.props.student_number;
+    console.log(this.props.student_number);
+    this.state.bar.animate(ratio);  // Number from 0.0 to 1.0
   }
 
   render() {
@@ -46,4 +54,3 @@ class PigmentBar extends React.Component<Props, {}> {
 }
 
 export default PigmentBar;
-
