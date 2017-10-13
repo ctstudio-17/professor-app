@@ -35,6 +35,7 @@ const correctContainerStyles = {
   color: '#5f5f5f'
 };
 const starDiv = {
+  cursor: 'pointer',
   border: 'solid 1px black',
   width: '54.3%',
   height: '32.1%'
@@ -55,7 +56,7 @@ class CreatePoll extends React.Component<Props, {}> {
         <div style={dotStyles}></div>
         <input style={inputStyles} placeholder='Write an answer' />
         <div style={correctContainerStyles}>
-          <div style={{...starDiv, backgroundColor: this.props.isCorrect ? 'yellow' : ''}} />
+          <div style={{...starDiv, backgroundColor: this.props.isCorrect ? 'yellow' : ''}} onClick={this.props.setCorrect} />
           <span>Correct</span>
         </div>
       </div>
