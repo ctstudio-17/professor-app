@@ -2,6 +2,7 @@ import * as React from 'react';
 
 import CreatePoll from './CreatePoll';
 import PlaceholderSlide from './PlaceholderSlide';
+import ConfusingStudents from './ConfusingStudents'
 
 const dashboardStyles = {
   padding: '1.5%',
@@ -34,6 +35,7 @@ class Dashboard extends React.Component<{}, State> {
         <div style={{...rowStyles, ...firstRowStyles}}>
           <CreatePoll />
           <PlaceholderSlide slideImageSrc={this.state.slideImageSrc} />
+          <ConfusingStudents />
         </div>
         <div style={rowStyles}>
         </div>
