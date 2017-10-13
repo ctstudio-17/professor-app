@@ -21,24 +21,20 @@ class Summary extends React.Component<{}, {}> {
   render() {
     return (
       <div style={colStyles}>
-        <div style={{height: '52.4%'}}>
-          <div style={rowStyles}>
-            <div style={{width: '30.1%'}}>
-              <RatingResults />
-            </div>
-            <div style={{width: '67.5%'}}>
-              <ConfusionResults />
-            </div>
+        <div style={{...rowStyles, height: '52.4%'}}>
+          <div style={{width: '30.1%'}}>
+            <RatingResults />
+          </div>
+          <div style={{width: '67.5%'}}>
+            <ConfusionResults />
           </div>
         </div>
-        <div style={{height: '44.5%'}}>
-          <div style={rowStyles}>
-            <div style={{width: '36.2%'}}>
-              <FeedbackResults />
-            </div>
-            <div style={{width: '60.9%'}}>
-              <PollResults />
-            </div>
+        <div style={{...rowStyles, height: '44.5%'}}>
+          <div style={{width: '36.2%'}}>
+            <FeedbackResults />
+          </div>
+          <div style={{width: '60.9%'}}>
+            <PollResults />
           </div>
         </div>
       </div>

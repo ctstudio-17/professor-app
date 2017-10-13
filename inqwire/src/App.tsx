@@ -9,6 +9,14 @@ const appStyles = {
   display: 'flex',
   flexDirection: 'column' as 'column'
 };
+const headerStyles = {
+  height: '8.2%'
+};
+const containerStyles = {
+  padding: '1.5%',
+  boxSizing: 'border-box',
+  height: '89.7%'
+};
 
 interface State {
   currPage: 'dashboard' | 'summary';
@@ -32,8 +40,10 @@ class App extends React.Component<{}, State> {
   render() {
     return (
       <div style={appStyles}>
-        <Header />
-        <div style={{padding: "1.5%", boxSizing: "border-box"}}>
+        <div style={headerStyles}>
+          <Header />
+        </div>
+        <div style={containerStyles}>
           {this.state.currPage === 'dashboard' ? <Dashboard endLecture={this.endLecture.bind(this)} /> : <Summary />}
         </div>
       </div>

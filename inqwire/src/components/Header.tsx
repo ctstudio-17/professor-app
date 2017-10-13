@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const headerStyles = {
   width: '100%',
-  height: '8.2%',
+  height: '100%',
   backgroundColor: '#f9f9f9',
   boxShadow: '0 2px 11px 0 rgba(190, 190, 190, 0.63)',
   display: 'flex',

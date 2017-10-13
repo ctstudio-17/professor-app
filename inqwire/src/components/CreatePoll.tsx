@@ -122,7 +122,8 @@ class CreatePoll extends React.Component<Props, State> {
 
         <div style={answerContainerStyles}>
           {
-            this.state.answers.map((answerText, i) => <PollAnswer letter={String.fromCharCode(65 + i)}
+            this.state.answers.map((answerText, i) => <PollAnswer key={i}
+                                                                  letter={String.fromCharCode(65 + i)}
                                                                   answerText={answerText}
                                                                   isCorrect={this.state.correctAns[i]}
                                                                   setAnswerText={this.updateAnswerText.bind(this, i = i)}

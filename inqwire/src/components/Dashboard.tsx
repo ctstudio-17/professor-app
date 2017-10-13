@@ -7,7 +7,7 @@ import EndLecture from './EndLecture';
 import PollResults from './PollResults';
 
 const dashboardStyles = {
-  height: '91.8%',
+  height: '100%',
   display: 'flex',
   flexDirection: 'column' as 'column'
 };

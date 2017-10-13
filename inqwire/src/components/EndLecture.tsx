@@ -107,7 +107,7 @@ class EndLecture extends React.Component<Props, State> {
           </div>
           <div>Lecture In Progress</div>
         </div>
-        <div style={subHeaderStyles}>CLICK TO END PRESENTATION</div>
+        <div style={subHeaderStyles}>CLICK TO END LECTURE</div>
 
         <div style={timeContainerStyles}>
           <div style={timeStyles}>
