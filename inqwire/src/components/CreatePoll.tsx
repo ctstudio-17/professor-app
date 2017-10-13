@@ -5,11 +5,8 @@ import PollAnswer from './PollAnswer';
 
 const clockIcon = require('../assets/clock-icon.svg');
 const pollContainerStyles = {
-  width: '36.2%',
+  width: '100%',
   height: '100%',
-  padding: '2%',
-  boxSizing: 'border-box',
-  border: 'solid 1px black',
   display: 'flex',
   flexDirection: 'column' as 'column',
   justifyContent: 'space-between' as 'space-between'
@@ -47,22 +44,23 @@ const answerContainerStyles = {
   overflowY: 'auto' as 'auto'
 };
 
+interface Props {
+  startPoll: any;
+}
 interface State {
   pollTime: number;
   questionText: string;
   answers: string[];
   correctAns: boolean[];
-  pollRunning: boolean;
 }
 
-class CreatePoll extends React.Component<{}, State> {
+class CreatePoll extends React.Component<Props, State> {
   componentWillMount() {
     this.setState({
       pollTime: 1,
       questionText: '',
       answers: ['', '', '', ''],
-      correctAns: [false, false, false, false],
-      pollRunning: false
+      correctAns: [false, false, false, false]
     });
   }
 
@@ -95,16 +93,13 @@ class CreatePoll extends React.Component<{}, State> {
       correctAns: correctAns
     });
   }
-  togglePoll() {
-    this.setState({pollRunning: !this.state.pollRunning});
-  }
   checkUnderstanding() {
     this.setState({
       questionText: 'Do you understand?',
       answers: ['Yes', 'No', '', ''],
       correctAns: [false, false, false, false]
     });
-    this.togglePoll();
+    this.props.startPoll();
   }
 
   render() {
@@ -127,7 +122,8 @@ class CreatePoll extends React.Component<{}, State> {
 
         <div style={answerContainerStyles}>
           {
-            this.state.answers.map((answerText, i) => <PollAnswer answerText={answerText}
+            this.state.answers.map((answerText, i) => <PollAnswer letter={String.fromCharCode(65 + i)}
+                                                                  answerText={answerText}
                                                                   isCorrect={this.state.correctAns[i]}
                                                                   setAnswerText={this.updateAnswerText.bind(this, i = i)}
                                                                   setCorrect={this.toggleCorrectAnswer.bind(this, i)} />)
@@ -136,7 +132,7 @@ class CreatePoll extends React.Component<{}, State> {
 
         <div style={{...answerContainerStyles, height: '19.2%'}}>
           <Button height='41.5%' backgroundColor='#e7e7e7' textColor='#5f5f5f' buttonText='ADD ANOTHER ANSWER' handleButtonClick={this.addAnotherAnswer.bind(this)} />
-          <Button height='41.5%' backgroundColor='#bbbbbb' textColor='#ffffff' buttonText={this.state.pollRunning ? 'END POLL' : 'START POLL'} handleButtonClick={this.togglePoll.bind(this)} />
+          <Button height='41.5%' backgroundColor='#bbbbbb' textColor='#ffffff' buttonText={'START POLL'} handleButtonClick={this.props.startPoll} />
         </div>
 
         <div style={{height: '1px', width: '100%', backgroundColor: 'black'}} />

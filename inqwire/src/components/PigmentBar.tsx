@@ -7,6 +7,7 @@ const divStyles = {
   width: '100%',
   height: '30px',
 };
+
 const progressSettings = {
   strokeWidth: 4,
   easing: 'easeInOut',
@@ -27,12 +28,19 @@ interface Props {
   numTotalStudents: number;
 }
 
-class PigmentBar extends React.Component<Props, {}> {
+interface State {
+  bar: any;
+}
+
+class PigmentBar extends React.Component<Props, State> {
   componentDidMount() {
-    const bar = new ProgressBar.Line('#bar-container', progressSettings);
-    bar.path.style.strokeLinecap = 'round';
-    const ratio = this.props.numConfusedStudents / this.props.numTotalStudents;
-    bar.animate(ratio);
+    this.setState({bar: new ProgressBar.Line('#bar-container', progressSettings)});
+    // this.state.bar.path.style.strokeLinecap = 'round';
+  }
+
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    var ratio = this.props.numConfusedStudents / this.props.numTotalStudents;
+    this.state.bar.animate(ratio);  // Number from 0.0 to 1.0
   }
 
   render() {
