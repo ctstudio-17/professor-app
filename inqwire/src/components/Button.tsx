@@ -23,11 +23,12 @@ class Button extends React.Component<Props, {}> {
   render() {
     return (
       <div style={{
-          ...buttonStyles,
-          height: this.props.height,
-          backgroundColor: this.props.backgroundColor,
-          color: this.props.textColor}}
-          onClick={this.props.handleButtonClick}>
+             ...buttonStyles,
+             height: this.props.height,
+             backgroundColor: this.props.backgroundColor,
+             color: this.props.textColor
+           }}
+           onClick={this.props.handleButtonClick}>
         {this.props.buttonText}
       </div>
     );

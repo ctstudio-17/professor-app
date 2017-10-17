@@ -7,14 +7,9 @@ const PollResultsStyles = {
 };
 
 class PollResults extends React.Component<{}, {}> {
-  componentWillMount() {
-    this.setState({
-    });
-  }
-
   render() {
     return (
-    <div style = {PollResultsStyles}>
+    <div style={PollResultsStyles}>
         <span>Poll Results</span>
     </div>
     );

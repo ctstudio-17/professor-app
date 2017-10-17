@@ -6,6 +6,8 @@ import ConfusedStudents from './ConfusedStudents';
 import EndLecture from './EndLecture';
 import PollResults from './PollResults';
 
+const slideImageSrc = require('../assets/sample-slide.png');
+
 const dashboardStyles = {
   height: '100%',
   display: 'flex',
@@ -29,19 +31,20 @@ const colStyles = {
 };
 
 interface Props {
-  endLecture: any;
+  endLecture: Function;
 }
 interface State {
-  slideImageSrc: any;
   pollRunning: boolean;
 }
 
 class Dashboard extends React.Component<Props, State> {
-  componentWillMount() {
-    this.setState({
-      slideImageSrc: require('../assets/sample-slide.png'),
+  constructor(props: Props) {
+    super(props);
+
+    this.startPoll = this.startPoll.bind(this);
+    this.state = {
       pollRunning: false
-    });
+    };
   }
 
   startPoll() {
@@ -53,11 +56,11 @@ class Dashboard extends React.Component<Props, State> {
       <div style={dashboardStyles}>
         <div style={{...rowStyles, height: '89.7%'}}>
           <div style={pollContainerStyles}>
-            {this.state.pollRunning ? <PollResults /> : <CreatePoll startPoll={this.startPoll.bind(this)} />}
+            {this.state.pollRunning ? <PollResults /> : <CreatePoll startPoll={this.startPoll} />}
           </div>
           <div style={colStyles}>
             <div style={{height: '61.7%'}}>
-              <PlaceholderSlide slideImageSrc={this.state.slideImageSrc} />
+              <PlaceholderSlide slideImageSrc={slideImageSrc} />
             </div>
             <div style={{height: '18.5%'}}>
               <ConfusedStudents />
@@ -67,8 +70,7 @@ class Dashboard extends React.Component<Props, State> {
             </div>
           </div>
         </div>
-        <div style={rowStyles}>
-        </div>
+        <div style={rowStyles} />
       </div>
     );
   }

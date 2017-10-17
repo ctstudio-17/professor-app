@@ -12,14 +12,9 @@ const confusionResultsStyles = {
 };
 
 class ConfusionResults extends React.Component<{}, {}> {
-  componentWillMount() {
-    this.setState({
-    });
-  }
-
   render() {
     return (
-    <div style = {confusionResultsStyles}>
+    <div style={confusionResultsStyles}>
       <img src={confusionResultsSample} style={{height: '100%', width: '100%'}} />
     </div>
     );

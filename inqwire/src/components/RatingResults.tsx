@@ -42,11 +42,6 @@ function drawRatingChart() {
 } */
 
 class RatingResults extends React.Component<{}, {}> {
-  componentWillMount() {
-    this.setState({
-    });
-  }
-
   render() {
     return (
     <div style={RatingResultsStyles}>

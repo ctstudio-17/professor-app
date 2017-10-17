@@ -29,31 +29,37 @@ interface State {
 }
 
 class ConfusingStudents extends React.Component<{}, State> {
-  constructor() {
-    super();
-    let studentsRef = fire.database().ref('classes/1/students');
-    var students = 1;
-    studentsRef.once("value", (snapshot: any) => {
-      this.setState({ numTotalStudents: snapshot.numChildren() });
-    });
+  constructor(props: {}) {
+    super(props);
+
+    this.initStudents();
+    this.initConfusions();
+
     this.state = {
       numConfusedStudents: [],
-      numTotalStudents: students,
+      numTotalStudents: 1,
     };
   }
 
-  componentWillMount() {
+  initStudents() {
+    const studentsRef = fire.database().ref('classes/1/students');
+    studentsRef.once('value', (snapshot: any) => {
+      this.setState({ numTotalStudents: snapshot.numChildren() });
+    });
+  }
+
+  initConfusions() {
     /* Create reference to messages in Firebase Database */
-    let confusionsRef = fire.database().ref('lectures/1/confusions');
+    const confusionsRef = fire.database().ref('lectures/1/confusions');
     confusionsRef.on('child_added', (snapshot: any) => {
       /* Update React state when message is added at Firebase Database */
-      let student = snapshot.child('student').val();
+      const student = snapshot.child('student').val();
       if ( this.state.numConfusedStudents.indexOf(student) < 0 ) {
-        var _numConfusedStudents = this.state.numConfusedStudents.slice()
+        const _numConfusedStudents = this.state.numConfusedStudents.slice();
         _numConfusedStudents.push(student);
         this.setState({ numConfusedStudents: _numConfusedStudents });
       }
-    })
+    });
   }
 
   render() {

@@ -24,7 +24,16 @@ interface State {
 }
 
 class App extends React.Component<{}, State> {
-  componentWillMount() {
+  constructor(props: {}) {
+    super(props);
+
+    this.endLecture = this.endLecture.bind(this);
+    this.state = {
+      currPage: 'dashboard'
+    };
+  }
+
+  componentDidMount() {
     this.startLecture();
   }
 
@@ -45,7 +54,7 @@ class App extends React.Component<{}, State> {
           <Header />
         </div>
         <div style={containerStyles}>
-          {this.state.currPage === 'dashboard' ? <Dashboard endLecture={this.endLecture.bind(this)} /> : <Summary />}
+          {this.state.currPage === 'dashboard' ? <Dashboard endLecture={this.endLecture} /> : <Summary />}
         </div>
       </div>
     );

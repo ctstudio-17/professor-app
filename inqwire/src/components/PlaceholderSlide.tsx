@@ -2,6 +2,8 @@ import * as React from 'react';
 
 const lavendar = '#8e8df3';
 
+const presentationIcon = require('../assets/presentation-icon.svg');
+
 const containerStyles = {
   backgroundColor: '#f9f9f9',
   border: `solid 7px ${lavendar}`,
@@ -49,17 +51,17 @@ interface State {
   currentMode: string;
   currentSlide: number;
   totalSlides: number;
-  presentationIcon: any;
 }
 
 class PlaceholderSlide extends React.Component<Props, State> {
-  componentWillMount() {
-    this.setState({
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
       currentMode: 'Presentation',
       currentSlide: 30,
-      totalSlides: 257,
-      presentationIcon: require('../assets/presentation-icon.svg')
-    });
+      totalSlides: 257
+    };
   }
 
   render() {
@@ -68,7 +70,7 @@ class PlaceholderSlide extends React.Component<Props, State> {
         <img src={this.props.slideImageSrc} style={slideStyles} />
         <div style={detailsBarStyles}>
           <div style={slidesModeStyles}>
-            <img src={this.state.presentationIcon} style={imgStyles} />
+            <img src={presentationIcon} style={imgStyles} />
             <span>{this.state.currentMode} Mode</span>
           </div>
           <div style={slideCounterStyles}>

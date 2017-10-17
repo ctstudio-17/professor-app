@@ -12,14 +12,9 @@ const feedbackResultsStyles = {
 };
 
 class FeedbackResults extends React.Component<{}, {}> {
-  componentWillMount() {
-    this.setState({
-    });
-  }
-
   render() {
     return (
-    <div style = {feedbackResultsStyles}>
+    <div style={feedbackResultsStyles}>
       <img src={feedbackResultsSample} style={{height: '100%', width: '100%'}} />
     </div>
     );

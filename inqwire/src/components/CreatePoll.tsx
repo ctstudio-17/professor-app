@@ -55,13 +55,19 @@ interface State {
 }
 
 class CreatePoll extends React.Component<Props, State> {
-  componentWillMount() {
-    this.setState({
+  constructor(props: Props) {
+    super(props);
+
+    this.updateQuestionText = this.updateQuestionText.bind(this);
+    this.addAnotherAnswer = this.addAnotherAnswer.bind(this);
+    this.checkUnderstanding = this.checkUnderstanding.bind(this);
+    const numDefaultQues = 4;
+    this.state = {
       pollTime: 1,
       questionText: '',
-      answers: ['', '', '', ''],
-      correctAns: [false, false, false, false]
-    });
+      answers: Array(numDefaultQues).fill(''),
+      correctAns: Array(numDefaultQues).fill(false)
+    };
   }
 
   updateQuestionText(e: any) {
@@ -115,7 +121,7 @@ class CreatePoll extends React.Component<Props, State> {
 
         <div>
           <input type='text' placeholder='Type a question...' style={inputStyles}
-                 value={this.state.questionText} onChange={this.updateQuestionText.bind(this)} />
+                 value={this.state.questionText} onChange={this.updateQuestionText} />
         </div>
 
         <div style={{height: '2px', width: '100%', backgroundColor: 'black'}} />
@@ -132,7 +138,7 @@ class CreatePoll extends React.Component<Props, State> {
         </div>
 
         <div style={{...answerContainerStyles, height: '19.2%'}}>
-          <Button height='41.5%' backgroundColor='#e7e7e7' textColor='#5f5f5f' buttonText='ADD ANOTHER ANSWER' handleButtonClick={this.addAnotherAnswer.bind(this)} />
+          <Button height='41.5%' backgroundColor='#e7e7e7' textColor='#5f5f5f' buttonText='ADD ANOTHER ANSWER' handleButtonClick={this.addAnotherAnswer} />
           <Button height='41.5%' backgroundColor='#bbbbbb' textColor='#ffffff' buttonText={'START POLL'} handleButtonClick={this.props.startPoll} />
         </div>
 
@@ -140,7 +146,7 @@ class CreatePoll extends React.Component<Props, State> {
 
         <div style={{...answerContainerStyles, height: '13.7%'}}>
           <div>COMPREHENSION POLL</div>
-          <Button height='57.3%' backgroundColor='#8e8df3' textColor='#ffffff' buttonText='CHECK UNDERSTANDING' handleButtonClick={this.checkUnderstanding.bind(this)} />
+          <Button height='57.3%' backgroundColor='#8e8df3' textColor='#ffffff' buttonText='CHECK UNDERSTANDING' handleButtonClick={this.checkUnderstanding} />
         </div>
       </div>
     );
