@@ -19,8 +19,8 @@ const headerRowStyles = {
   height: '3.5%'
 };
 const timeContainerStyles = {
-  color: '#8e8df3',
-  borderBottom: 'solid 1px #8e8df3',
+  color: 'var(--lavender-blue)',
+  borderBottom: 'solid 1px var(--lavender-blue)',
   display: 'inline-block',
   boxSizing: 'border-box',
   height: '100%',
@@ -146,7 +146,7 @@ class CreatePoll extends React.Component<Props, State> {
 
         <div style={{...answerContainerStyles, height: '13.7%'}}>
           <div>COMPREHENSION POLL</div>
-          <Button height='57.3%' backgroundColor='#8e8df3' textColor='#ffffff' buttonText='CHECK UNDERSTANDING' handleButtonClick={this.checkUnderstanding} />
+          <Button height='57.3%' backgroundColor='var(--lavender-blue)' textColor='#ffffff' buttonText='CHECK UNDERSTANDING' handleButtonClick={this.checkUnderstanding} />
         </div>
       </div>
     );

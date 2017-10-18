@@ -1,12 +1,12 @@
 import * as React from 'react';
 
 import CreatePoll from './CreatePoll';
-import PlaceholderSlide from './PlaceholderSlide';
+// import PresentationViewer from './PresentationViewer';
 import ConfusedStudents from './ConfusedStudents';
 import EndLecture from './EndLecture';
 import PollResults from './PollResults';
 
-const slideImageSrc = require('../assets/sample-slide.png');
+// const slideImageSrc = require('../assets/sample-slide.png');
 
 const dashboardStyles = {
   height: '100%',
@@ -35,6 +35,7 @@ interface Props {
 }
 interface State {
   pollRunning: boolean;
+  slidesSrc: string;
 }
 
 class Dashboard extends React.Component<Props, State> {
@@ -43,7 +44,10 @@ class Dashboard extends React.Component<Props, State> {
 
     this.startPoll = this.startPoll.bind(this);
     this.state = {
-      pollRunning: false
+      pollRunning: false,
+      slidesSrc: 'https://docs.google.com/presentation/d/e/' +
+                  '2PACX-1vQHgagKDozYsFjpI1ubOVX2ZX_lU5IkfryfDcUwrDTMlvuLlmGmRezKfV9Af4_YRqrbQgoMOgEGAPVI/' +
+                  'embed?start=false&loop=false&delayms=60000'
     };
   }
 
@@ -60,7 +64,15 @@ class Dashboard extends React.Component<Props, State> {
           </div>
           <div style={colStyles}>
             <div style={{height: '61.7%'}}>
-              <PlaceholderSlide slideImageSrc={slideImageSrc} />
+            {React.createElement('iframe', {
+              src: this.state.slidesSrc,
+              frameBorder: '0',
+              width: '100%',
+              height: '100%',
+              allowFullScreen: 'true',
+              mozallowfullscreen: 'true',
+              webkitallowfullscreen: 'true'
+            })}
             </div>
             <div style={{height: '18.5%'}}>
               <ConfusedStudents />

@@ -1,3 +1,16 @@
+:root {
+  --dark-slate-blue: #25306e;
+  --robin-s-egg: #53d8ff;
+  --duck-egg-blue: #cbfaee;
+  --seafoam-blue: #61dbc7;
+  --lavender-blue: #8e8df3;
+  --bright-sky-blue: #30baff;
+  --pale-lilac: #d1d1ff;
+  --duck-egg-blue-two: #d9f2fb;
+  --white: #f9f9f9;
+  --red-pink: #f43348;
+}
+
 body {
   margin: 0;
   padding: 0;

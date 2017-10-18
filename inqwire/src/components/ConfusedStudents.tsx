@@ -7,7 +7,7 @@ const profAvatar = require('../assets/confusion-icon.svg');
 
 const containerStyles = {
   padding: '2.9%',
-  backgroundColor: '#f9f9f9',
+  backgroundColor: 'var(--white)',
   boxShadow: '0 2px 11px 0 rgba(190, 190, 190, 0.45)'
 };
 const imgContainerStyles = {
@@ -52,6 +52,8 @@ class ConfusingStudents extends React.Component<{}, State> {
     /* Create reference to messages in Firebase Database */
     const confusionsRef = fire.database().ref('lectures/1/confusions');
     confusionsRef.on('child_added', (snapshot: any) => {
+      // const currSlide = document.getElementsByClassName('goog-flat-menu-button-caption')[0].textContent.trim().split(' ')[1];
+
       /* Update React state when message is added at Firebase Database */
       const student = snapshot.child('student').val();
       if ( this.state.numConfusedStudents.indexOf(student) < 0 ) {

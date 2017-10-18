@@ -34,13 +34,15 @@ interface State {
 
 class PigmentBar extends React.Component<Props, State> {
   componentDidMount() {
-    this.setState({bar: new ProgressBar.Line('#bar-container', progressSettings)});
-    // this.state.bar.path.style.strokeLinecap = 'round';
+    const bar = new ProgressBar.Line('#bar-container', progressSettings);
+    bar.svg.style.strokeLinecap = 'round';
+    bar.path.style.strokeLinecap = 'round';
+    this.setState({ bar });
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
-    var ratio = this.props.numConfusedStudents / this.props.numTotalStudents;
-    this.state.bar.animate(ratio);  // Number from 0.0 to 1.0
+    const ratio = this.props.numConfusedStudents / this.props.numTotalStudents;
+    this.state.bar.animate(ratio);
   }
 
   render() {

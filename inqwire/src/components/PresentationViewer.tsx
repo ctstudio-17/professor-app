@@ -1,12 +1,10 @@
 import * as React from 'react';
 
-const lavendar = '#8e8df3';
-
 const presentationIcon = require('../assets/presentation-icon.svg');
 
 const containerStyles = {
-  backgroundColor: '#f9f9f9',
-  border: `solid 7px ${lavendar}`,
+  backgroundColor: 'var(--white)',
+  border: `solid 7px var(--lavender-blue)`,
   position: 'relative' as 'relative',
   width: '100%',
   height: '100%',
@@ -18,7 +16,7 @@ const slideStyles = {
 };
 const detailsBarStyles = {
   opacity: 0.75,
-  backgroundColor: lavendar,
+  backgroundColor: 'var(--lavender-blue)',
   position: 'absolute' as 'absolute',
   bottom: 0,
   left: 0,
@@ -53,7 +51,7 @@ interface State {
   totalSlides: number;
 }
 
-class PlaceholderSlide extends React.Component<Props, State> {
+class PresentationViewer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
@@ -82,4 +80,4 @@ class PlaceholderSlide extends React.Component<Props, State> {
   }
 }
 
-export default PlaceholderSlide;
+export default PresentationViewer;

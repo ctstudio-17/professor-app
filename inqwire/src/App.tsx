@@ -20,7 +20,7 @@ const containerStyles = {
 };
 
 interface State {
-  currPage: 'dashboard' | 'summary';
+  currPage: 'login' | 'dashboard' | 'summary' | 'history';
 }
 
 class App extends React.Component<{}, State> {
