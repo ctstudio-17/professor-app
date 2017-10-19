@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-const starIcon = require('../assets/star-icon.svg');
-const starIconFilled = require('../assets/star-icon-filled.svg');
+const starIcon = require('../../assets/star-icon.svg');
+const starIconFilled = require('../../assets/star-icon-filled.svg');
 
 const answerBoxStyles = {
   width: '100%',

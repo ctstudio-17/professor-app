@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const feedbackResultsSample = require('../assets/feedback-results.png');
+const feedbackResultsSample = require('../../assets/feedback-results.png');
 
 const feedbackResultsStyles = {
   width: '100%',

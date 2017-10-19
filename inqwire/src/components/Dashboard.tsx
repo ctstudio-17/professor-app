@@ -1,12 +1,13 @@
 import * as React from 'react';
+import * as GoogleApi from './shared/GoogleApiInterface';
 
-import CreatePoll from './CreatePoll';
-// import PresentationViewer from './PresentationViewer';
-import ConfusedStudents from './ConfusedStudents';
-import EndLecture from './EndLecture';
-import PollResults from './PollResults';
-
-// const slideImageSrc = require('../assets/sample-slide.png');
+import Button from './shared/Button';
+import CreatePoll from './dashboard/CreatePoll';
+import ConfusedStudents from './dashboard/ConfusedStudents';
+import EndLecture from './dashboard/EndLecture';
+import GoogleSlidesPicker from './dashboard/GoogleSlidesPicker';
+import PollResults from './dashboard/PollResults';
+import PresentationViewer from './dashboard/PresentationViewer';
 
 const dashboardStyles = {
   height: '100%',
@@ -35,20 +36,49 @@ interface Props {
 }
 interface State {
   pollRunning: boolean;
-  slidesSrc: string;
+  selectedPresentationId: string;
+  userAuthorized: boolean;
 }
 
 class Dashboard extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
+    this.updateGoogleAuthStatus = this.updateGoogleAuthStatus.bind(this);
+    this.handleAuthClick = this.handleAuthClick.bind(this);
+    this.selectPresentation = this.selectPresentation.bind(this);
     this.startPoll = this.startPoll.bind(this);
+
     this.state = {
       pollRunning: false,
-      slidesSrc: 'https://docs.google.com/presentation/d/e/' +
-                  '2PACX-1vQHgagKDozYsFjpI1ubOVX2ZX_lU5IkfryfDcUwrDTMlvuLlmGmRezKfV9Af4_YRqrbQgoMOgEGAPVI/' +
-                  'embed?start=false&loop=false&delayms=60000'
+      selectedPresentationId: '',
+      userAuthorized: false
     };
+  }
+
+  componentDidMount() {
+    GoogleApi.setupApi(this.updateGoogleAuthStatus);
+  }
+
+  updateGoogleAuthStatus(isSignedIn: boolean) {
+    if (isSignedIn) {
+      this.setState({userAuthorized: true});
+    } else {
+      this.setState({userAuthorized: false});
+    }
+  }
+
+  handleAuthClick() {
+    if (this.state.userAuthorized) {
+      GoogleApi.signOut();
+    } else {
+      GoogleApi.signIn();
+    }
+  }
+
+  selectPresentation(id: string) {
+    this.setState({selectedPresentationId: id});
+    console.log(id);
   }
 
   startPoll() {
@@ -63,16 +93,18 @@ class Dashboard extends React.Component<Props, State> {
             {this.state.pollRunning ? <PollResults /> : <CreatePoll startPoll={this.startPoll} />}
           </div>
           <div style={colStyles}>
-            <div style={{height: '61.7%'}}>
-            {React.createElement('iframe', {
-              src: this.state.slidesSrc,
-              frameBorder: '0',
-              width: '100%',
-              height: '100%',
-              allowFullScreen: 'true',
-              mozallowfullscreen: 'true',
-              webkitallowfullscreen: 'true'
-            })}
+            <div style={{height: '61.7%', }}>
+              {
+                this.state.userAuthorized ?
+                  (this.state.selectedPresentationId ?
+                    <PresentationViewer presentationId={this.state.selectedPresentationId} /> :
+                    <GoogleSlidesPicker logOutGoogleAuth={this.handleAuthClick} selectPresentation={this.selectPresentation} />) :
+                  <Button height='10%'
+                          backgroundColor='black'
+                          textColor='white'
+                          buttonText='Log In'
+                          handleButtonClick={this.handleAuthClick} />
+              }
             </div>
             <div style={{height: '18.5%'}}>
               <ConfusedStudents />

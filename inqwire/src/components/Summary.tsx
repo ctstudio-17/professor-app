@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import RatingResults from './RatingResults';
-import FeedbackResults from './FeedbackResults';
-import ConfusionResults from './ConfusionResults';
-import PollResultsSummary from './PollResultsSummary';
+import RatingResults from './summary/RatingResults';
+import FeedbackResults from './summary/FeedbackResults';
+import ConfusionResults from './summary/ConfusionResults';
+import PollResultsSummary from './summary/PollResultsSummary';
 
 const rowStyles = {
   display: 'flex',

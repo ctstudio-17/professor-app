@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import Button from './Button';
+import Button from '../shared/Button';
 import PollAnswer from './PollAnswer';
 
-const clockIcon = require('../assets/clock-icon.svg');
+const clockIcon = require('../../assets/clock-icon.svg');
 const pollContainerStyles = {
   width: '100%',
   height: '100%',

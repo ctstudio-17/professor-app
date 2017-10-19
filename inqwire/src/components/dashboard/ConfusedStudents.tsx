@@ -1,9 +1,9 @@
 import * as React from 'react';
-import fire from '../firebase';
+import fire from '../../firebase';
 
 import PigmentBar from './PigmentBar';
 
-const profAvatar = require('../assets/confusion-icon.svg');
+const profAvatar = require('../../assets/confusion-icon.svg');
 
 const containerStyles = {
   padding: '2.9%',

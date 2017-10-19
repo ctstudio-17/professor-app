@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const confusionResultsSample = require('../assets/confusion-results.png');
+const confusionResultsSample = require('../../assets/confusion-results.png');
 
 const confusionResultsStyles = {
   width: '100%',

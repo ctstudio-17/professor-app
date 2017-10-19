@@ -1,5 +1,5 @@
 import * as React from 'react';
-import '../styles/animations.css';
+import '../../styles/animations.css';
 
 const containerStyles = {
   height: '100%',

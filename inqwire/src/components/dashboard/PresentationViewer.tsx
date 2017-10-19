@@ -1,6 +1,7 @@
 import * as React from 'react';
+import * as GoogleApi from '../shared/GoogleApiInterface';
 
-const presentationIcon = require('../assets/presentation-icon.svg');
+const presentationIcon = require('../../assets/presentation-icon.svg');
 
 const containerStyles = {
   backgroundColor: 'var(--white)',
@@ -43,29 +44,47 @@ const slideCounterStyles = {
 };
 
 interface Props {
-  slideImageSrc: string;
+  presentationId: string;
 }
 interface State {
   currentMode: string;
   currentSlide: number;
+  currentSlideImgSrc: string;
   totalSlides: number;
+  slideIds: string[];
 }
 
 class PresentationViewer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
+    GoogleApi.getPresentation(this.props.presentationId).then((response: any) => {
+      this.setState({
+        currentSlide: 1,
+        slideIds: response.result.slides.map((slide: any) => slide.objectId),
+        totalSlides: response.result.slides.length
+      });
+
+      GoogleApi.getSlideThumbnail(this.props.presentationId, this.state.slideIds[0]).then((res: any) => {
+        this.setState({
+          currentSlideImgSrc: res.result.contentUrl
+        });
+      });
+    });
+
     this.state = {
       currentMode: 'Presentation',
-      currentSlide: 30,
-      totalSlides: 257
+      currentSlide: 0,
+      currentSlideImgSrc: '',
+      totalSlides: 0,
+      slideIds: []
     };
   }
 
   render() {
     return (
       <div style={containerStyles}>
-        <img src={this.props.slideImageSrc} style={slideStyles} />
+        <img src={this.state.currentSlideImgSrc} style={slideStyles} />
         <div style={detailsBarStyles}>
           <div style={slidesModeStyles}>
             <img src={presentationIcon} style={imgStyles} />

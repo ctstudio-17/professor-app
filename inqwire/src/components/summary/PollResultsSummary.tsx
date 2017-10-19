@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const pollResultsSample = require('../assets/poll-results.png');
+const pollResultsSample = require('../../assets/poll-results.png');
 
 const pollResultsStyles = {
   width: '100%',
