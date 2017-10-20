@@ -5,6 +5,9 @@ import FeedbackResults from './summary/FeedbackResults';
 import ConfusionResults from './summary/ConfusionResults';
 import PollResultsSummary from './summary/PollResultsSummary';
 
+import { feedback } from '../mockdata/feedback';
+import { pollResults } from '../mockdata/poll-results';
+
 const rowStyles = {
   display: 'flex',
   justifyContent: 'space-between' as 'space-between'
@@ -31,10 +34,10 @@ class Summary extends React.Component<{}, {}> {
         </div>
         <div style={{...rowStyles, height: '44.5%'}}>
           <div style={{width: '36.2%'}}>
-            <FeedbackResults />
+            <FeedbackResults feedback={feedback} />
           </div>
           <div style={{width: '60.9%'}}>
-            <PollResultsSummary />
+            <PollResultsSummary polls={pollResults} />
           </div>
         </div>
       </div>
