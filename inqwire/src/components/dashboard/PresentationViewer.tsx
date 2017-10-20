@@ -30,21 +30,24 @@ const detailsBarStyles = {
 };
 const slidesModeStyles = {
   marginLeft: '3.8%',
-  fontSize: '16px'
+  fontSize: '16px',
+  width: '33%'
 };
 const imgStyles = {
-  width: '8.9%',
+  width: '5.2%',
   marginRight: '1.3%'
 };
 const slideCounterStyles = {
-  marginRight: '46.1%',
   fontWeight: 'bold' as 'bold',
   fontSize: '16px',
-  letterSpacing: '1px'
+  letterSpacing: '1px',
+  display: 'flex',
+  width: '33%'
 };
 
 interface Props {
   presentationId: string;
+  closePresentation: any;
 }
 interface State {
   currentMode: string;
@@ -69,6 +72,9 @@ class PresentationViewer extends React.Component<Props, State> {
         this.setState({
           currentSlideImgSrc: res.result.contentUrl
         });
+
+        // Cache the slide thumbnails
+        this.state.slideIds.map((slideId: string) => GoogleApi.getSlideThumbnail(this.props.presentationId, slideId).then());
       });
     });
 
@@ -81,18 +87,38 @@ class PresentationViewer extends React.Component<Props, State> {
     };
   }
 
+  setPage(page: number) {
+    if (page < 1 || page > this.state.totalSlides) { return; }
+    GoogleApi.getSlideThumbnail(this.props.presentationId, this.state.slideIds[page - 1]).then((res: any) => {
+      this.setState({
+        currentSlide: page,
+        currentSlideImgSrc: res.result.contentUrl
+      });
+    });
+  }
+
   render() {
     return (
       <div style={containerStyles}>
         <img src={this.state.currentSlideImgSrc} style={slideStyles} />
+
         <div style={detailsBarStyles}>
           <div style={slidesModeStyles}>
             <img src={presentationIcon} style={imgStyles} />
             <span>{this.state.currentMode} Mode</span>
           </div>
           <div style={slideCounterStyles}>
-            {this.state.currentSlide} of {this.state.totalSlides}
+            <div style={{cursor: this.state.currentSlide <= 1 ? 'not-allowed' : 'pointer'}}
+                 onClick={() => this.setPage(this.state.currentSlide - 1)}>
+              &lt;
+            </div>
+            <div style={{margin: '0 10px'}}>{this.state.currentSlide} of {this.state.totalSlides}</div>
+            <div style={{cursor: this.state.currentSlide >= this.state.totalSlides ? 'not-allowed' : 'pointer'}}
+                 onClick={() => this.setPage(this.state.currentSlide + 1)}>
+              &gt;
+            </div>
           </div>
+          <div style={{cursor: 'pointer', marginRight: '3.8%'}} onClick={this.props.closePresentation}>&lt; Back</div>
         </div>
       </div>
     );

@@ -22,7 +22,7 @@ const profAvatar = require('../assets/professor_icon.svg');
 class Header extends React.Component<{}, {}> {
   render() {
     return (
-      <div id='header' style={headerStyles}>
+      <div style={headerStyles}>
         <div style={titleStyles}>inQwire</div>
         <div style={imgContainerStyles}>
           <img src={profAvatar} />

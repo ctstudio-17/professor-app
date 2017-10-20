@@ -47,6 +47,7 @@ class Dashboard extends React.Component<Props, State> {
     this.updateGoogleAuthStatus = this.updateGoogleAuthStatus.bind(this);
     this.handleAuthClick = this.handleAuthClick.bind(this);
     this.selectPresentation = this.selectPresentation.bind(this);
+    this.closePresentation = this.closePresentation.bind(this);
     this.startPoll = this.startPoll.bind(this);
 
     this.state = {
@@ -78,7 +79,10 @@ class Dashboard extends React.Component<Props, State> {
 
   selectPresentation(id: string) {
     this.setState({selectedPresentationId: id});
-    console.log(id);
+  }
+
+  closePresentation() {
+    this.setState({selectedPresentationId: ''});
   }
 
   startPoll() {
@@ -97,7 +101,7 @@ class Dashboard extends React.Component<Props, State> {
               {
                 this.state.userAuthorized ?
                   (this.state.selectedPresentationId ?
-                    <PresentationViewer presentationId={this.state.selectedPresentationId} /> :
+                    <PresentationViewer presentationId={this.state.selectedPresentationId} closePresentation={this.closePresentation} /> :
                     <GoogleSlidesPicker logOutGoogleAuth={this.handleAuthClick} selectPresentation={this.selectPresentation} />) :
                   <Button height='10%'
                           backgroundColor='black'
