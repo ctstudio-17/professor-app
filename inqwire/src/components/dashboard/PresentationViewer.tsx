@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as GoogleApi from '../shared/GoogleApiInterface';
 
-import { Presentation } from '../../models';
+import { Presentation, Slide } from '../../models';
 
 const presentationIcon = require('../../assets/presentation-icon.svg');
 
@@ -56,7 +56,7 @@ interface State {
   currentSlide: number;
   currentSlideImgSrc: string;
   totalSlides: number;
-  slideIds: string[];
+  slides: Slide[];
 }
 
 class PresentationViewer extends React.Component<Props, State> {
@@ -66,19 +66,17 @@ class PresentationViewer extends React.Component<Props, State> {
     GoogleApi.getPresentation(this.props.presentation.id).then((response: any) => {
       this.setState({
         currentSlide: 1,
-        slideIds: response.result.slides.map((slide: any) => slide.objectId),
+        slides: response.result.slides.map((slide: any) => ({cached: false, slideId: slide.objectId, studentsConfused: 0})),
         totalSlides: response.result.slides.length
       });
 
-      GoogleApi.getSlideThumbnail(this.props.presentation.id, this.state.slideIds[0]).then((res: any) => {
+      GoogleApi.getSlideThumbnail(this.props.presentation.id, this.state.slides[0].slideId).then((res: any) => {
         this.setState({
           currentSlideImgSrc: res.result.contentUrl
         });
 
-        // Cache the slide thumbnails
-        // TODO: this currently fails with large presentations because of Google Drive quota, so
-        // don't cache all at once, perhaps only the next 5 slides or so
-        this.state.slideIds.map((slideId: string) => GoogleApi.getSlideThumbnail(this.props.presentation.id, slideId).then());
+        // Cache the first 10 slide thumbnails
+        this.cacheThumbnails(1, 10);
       });
     });
 
@@ -87,17 +85,28 @@ class PresentationViewer extends React.Component<Props, State> {
       currentSlide: 0,
       currentSlideImgSrc: '',
       totalSlides: 0,
-      slideIds: []
+      slides: []
     };
+  }
+
+  cacheThumbnails(start: number, end: number) {
+    this.state.slides.slice(start, end).map((slide: Slide) => {
+      if (!slide.cached) {
+        GoogleApi.getSlideThumbnail(this.props.presentation.id, slide.slideId).then((res: any) => {
+          slide.cached = true;
+        });
+      }
+    });
   }
 
   setPage(page: number) {
     if (page < 1 || page > this.state.totalSlides) { return; }
-    GoogleApi.getSlideThumbnail(this.props.presentation.id, this.state.slideIds[page - 1]).then((res: any) => {
+    GoogleApi.getSlideThumbnail(this.props.presentation.id, this.state.slides[page - 1].slideId).then((res: any) => {
       this.setState({
         currentSlide: page,
         currentSlideImgSrc: res.result.contentUrl
       });
+      this.cacheThumbnails(page, Math.min(this.state.totalSlides, page + 10));
     });
   }
 

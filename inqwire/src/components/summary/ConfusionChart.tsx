@@ -4,7 +4,7 @@ import ChartBar from './ChartBar';
 import SummaryCardHeader from './SummaryCardHeader';
 import * as GoogleApi from '../shared/GoogleApiInterface';
 
-import { ConfusionSlide } from '../../models';
+import { Slide } from '../../models';
 import { confusionSlides } from '../../mockdata/confusion-slides';
 
 const containerStyles = {
@@ -60,7 +60,7 @@ const thumbnailStyles = {
 
 interface Props {
   presentationId: string;
-  confusionSlides: ConfusionSlide[];
+  confusionSlides: Slide[];
 }
 interface State {
   maxStudentsConfused: number;
@@ -72,7 +72,7 @@ class ConfusionChart extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const maxStudentsConfused = props.confusionSlides.reduce((prevVal: ConfusionSlide, currVal: ConfusionSlide) => {
+    const maxStudentsConfused = props.confusionSlides.reduce((prevVal: Slide, currVal: Slide) => {
                                                                 if (currVal.studentsConfused > prevVal.studentsConfused) {
                                                                   return currVal;
                                                                 } else {
@@ -81,7 +81,7 @@ class ConfusionChart extends React.Component<Props, State> {
                                                               }).studentsConfused;
 
     if (GoogleApi.getUserLoginStatus()) {
-      props.confusionSlides.map((slide: ConfusionSlide, i: number) => {
+      props.confusionSlides.map((slide: Slide, i: number) => {
         return GoogleApi.getSlideThumbnail(props.presentationId, slide.slideId).then((res: any) => {
             const newThumbnails = this.state.thumbnails;
             newThumbnails[i] = res.result.contentUrl;
@@ -131,7 +131,7 @@ class ConfusionChart extends React.Component<Props, State> {
             }
             <div style={barsContainerStyles}>
               {
-                confusionSlides.map((slide: ConfusionSlide, i: number) => {
+                confusionSlides.map((slide: Slide, i: number) => {
                   return <ChartBar key={i} numStudents={slide.studentsConfused} height={(slide.studentsConfused / this.state.topBarNum) * 100 + '%'} />;
                 })
               }
