@@ -2,9 +2,11 @@ import * as React from 'react';
 
 import RatingResults from './summary/RatingResults';
 import FeedbackResults from './summary/FeedbackResults';
-import ConfusionResults from './summary/ConfusionResults';
+import ConfusionChart from './summary/ConfusionChart';
 import PollResultsSummary from './summary/PollResultsSummary';
 
+import { Presentation } from '../models';
+import { confusionSlides } from '../mockdata/confusion-slides';
 import { feedback } from '../mockdata/feedback';
 import { pollResults } from '../mockdata/poll-results';
 
@@ -20,7 +22,11 @@ const colStyles = {
   height: '100%'
 };
 
-class Summary extends React.Component<{}, {}> {
+interface Props {
+  selectedPresentation: Presentation | null;
+}
+
+class Summary extends React.Component<Props, {}> {
   render() {
     return (
       <div style={colStyles}>
@@ -29,7 +35,11 @@ class Summary extends React.Component<{}, {}> {
             <RatingResults />
           </div>
           <div style={{width: '67.5%'}}>
-            <ConfusionResults />
+            {
+              this.props.selectedPresentation ?
+              <ConfusionChart presentationId={this.props.selectedPresentation.id} confusionSlides={confusionSlides} /> :
+              'No presentation was selected'
+            }
           </div>
         </div>
         <div style={{...rowStyles, height: '44.5%'}}>

@@ -9,6 +9,8 @@ import GoogleSlidesPicker from './dashboard/GoogleSlidesPicker';
 import PollResults from './dashboard/PollResults';
 import PresentationViewer from './dashboard/PresentationViewer';
 
+import { Presentation } from '../models';
+
 const dashboardStyles = {
   height: '100%',
   display: 'flex',
@@ -32,11 +34,13 @@ const colStyles = {
 };
 
 interface Props {
-  endLecture: Function;
+  endLecture: any;
+  selectPresentation: any;
+  closePresentation: any;
+  selectedPresentation: Presentation | null;
 }
 interface State {
   pollRunning: boolean;
-  selectedPresentationId: string;
   userAuthorized: boolean;
 }
 
@@ -46,13 +50,10 @@ class Dashboard extends React.Component<Props, State> {
 
     this.updateGoogleAuthStatus = this.updateGoogleAuthStatus.bind(this);
     this.handleAuthClick = this.handleAuthClick.bind(this);
-    this.selectPresentation = this.selectPresentation.bind(this);
-    this.closePresentation = this.closePresentation.bind(this);
     this.startPoll = this.startPoll.bind(this);
 
     this.state = {
       pollRunning: false,
-      selectedPresentationId: '',
       userAuthorized: false
     };
   }
@@ -77,14 +78,6 @@ class Dashboard extends React.Component<Props, State> {
     }
   }
 
-  selectPresentation(id: string) {
-    this.setState({selectedPresentationId: id});
-  }
-
-  closePresentation() {
-    this.setState({selectedPresentationId: ''});
-  }
-
   startPoll() {
     this.setState({pollRunning: true});
   }
@@ -100,9 +93,10 @@ class Dashboard extends React.Component<Props, State> {
             <div style={{height: '61.7%', }}>
               {
                 this.state.userAuthorized ?
-                  (this.state.selectedPresentationId ?
-                    <PresentationViewer presentationId={this.state.selectedPresentationId} closePresentation={this.closePresentation} /> :
-                    <GoogleSlidesPicker logOutGoogleAuth={this.handleAuthClick} selectPresentation={this.selectPresentation} />) :
+                  (this.props.selectedPresentation ?
+                    <PresentationViewer presentation={this.props.selectedPresentation}
+                                        closePresentation={this.props.closePresentation} /> :
+                    <GoogleSlidesPicker logOutGoogleAuth={this.handleAuthClick} selectPresentation={this.props.selectPresentation} />) :
                   <Button height='10%'
                           backgroundColor='black'
                           textColor='white'

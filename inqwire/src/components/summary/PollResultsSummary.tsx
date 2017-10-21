@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import SummaryCardHeader from './SummaryCardHeader';
 
+import { PollAnswer, PollResults } from '../../models';
+
 const starIcon = require('../../assets/star-icon-filled.svg');
 
 const flexSpaceBetween = {
@@ -14,6 +16,7 @@ const containerStyles = {
   height: '100%',
   boxSizing: 'border-box',
   border: 'solid 1px black',
+  backgroundColor: 'var(--white)',
   ...flexSpaceBetween
 };
 const resultsContainerStyles = {
@@ -52,15 +55,6 @@ const nextButtonStyles = {
   borderTop: 'solid 1px rgba(151, 151, 151, 0.24)'
 };
 
-interface PollAnswer {
-  answerText: string;
-  isCorrect: boolean;
-  numStudentResponses: number;
-}
-interface PollResults {
-  questionText: string;
-  answers: PollAnswer[];
-}
 interface Props {
   polls: PollResults[];
 }

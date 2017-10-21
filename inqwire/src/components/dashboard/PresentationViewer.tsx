@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as GoogleApi from '../shared/GoogleApiInterface';
 
+import { Presentation } from '../../models';
+
 const presentationIcon = require('../../assets/presentation-icon.svg');
 
 const containerStyles = {
@@ -46,7 +48,7 @@ const slideCounterStyles = {
 };
 
 interface Props {
-  presentationId: string;
+  presentation: Presentation;
   closePresentation: any;
 }
 interface State {
@@ -61,20 +63,22 @@ class PresentationViewer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    GoogleApi.getPresentation(this.props.presentationId).then((response: any) => {
+    GoogleApi.getPresentation(this.props.presentation.id).then((response: any) => {
       this.setState({
         currentSlide: 1,
         slideIds: response.result.slides.map((slide: any) => slide.objectId),
         totalSlides: response.result.slides.length
       });
 
-      GoogleApi.getSlideThumbnail(this.props.presentationId, this.state.slideIds[0]).then((res: any) => {
+      GoogleApi.getSlideThumbnail(this.props.presentation.id, this.state.slideIds[0]).then((res: any) => {
         this.setState({
           currentSlideImgSrc: res.result.contentUrl
         });
 
         // Cache the slide thumbnails
-        this.state.slideIds.map((slideId: string) => GoogleApi.getSlideThumbnail(this.props.presentationId, slideId).then());
+        // TODO: this currently fails with large presentations because of Google Drive quota, so
+        // don't cache all at once, perhaps only the next 5 slides or so
+        this.state.slideIds.map((slideId: string) => GoogleApi.getSlideThumbnail(this.props.presentation.id, slideId).then());
       });
     });
 
@@ -89,7 +93,7 @@ class PresentationViewer extends React.Component<Props, State> {
 
   setPage(page: number) {
     if (page < 1 || page > this.state.totalSlides) { return; }
-    GoogleApi.getSlideThumbnail(this.props.presentationId, this.state.slideIds[page - 1]).then((res: any) => {
+    GoogleApi.getSlideThumbnail(this.props.presentation.id, this.state.slideIds[page - 1]).then((res: any) => {
       this.setState({
         currentSlide: page,
         currentSlideImgSrc: res.result.contentUrl

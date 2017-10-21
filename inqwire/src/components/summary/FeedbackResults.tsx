@@ -7,6 +7,7 @@ const containerStyles = {
   height: '100%',
   boxSizing: 'border-box',
   border: 'solid 1px black',
+  backgroundColor: 'var(--white)',
   display: 'flex',
   flexDirection: 'column' as 'column',
   justifyContent: 'space-between' as 'space-between'

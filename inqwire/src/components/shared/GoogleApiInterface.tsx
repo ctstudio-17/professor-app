@@ -26,15 +26,15 @@ export const signIn = () => gapi.auth2.getAuthInstance().signIn();
 
 export const signOut = () => gapi.auth2.getAuthInstance().signOut();
 
-export function getUserLoginStatus() {
-  return gapi.auth2.getAuthInstance().isSignedIn.get();
+export function getUserLoginStatus(): boolean {
+  return gapi.auth2 && gapi.auth2.getAuthInstance().isSignedIn.get();
 }
 
-export function getSlides(pageToken?: string) {
+export function getPresentations(pageToken?: string) {
   return gapi.client.drive.files.list({
     pageSize: 10,
     q: 'mimeType="application/vnd.google-apps.presentation"',
-    fields: 'nextPageToken, files(id, name)',
+    fields: 'nextPageToken, files(id, name, webViewLink)',
     pageToken: pageToken
   });
 }

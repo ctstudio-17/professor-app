@@ -5,6 +5,8 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Summary from './components/Summary';
 
+import { Presentation } from './models';
+
 const appStyles = {
   height: '100%',
   display: 'flex',
@@ -21,6 +23,7 @@ const containerStyles = {
 
 interface State {
   currPage: 'login' | 'dashboard' | 'summary' | 'history';
+  selectedPresentation: Presentation | null;
 }
 
 class App extends React.Component<{}, State> {
@@ -28,8 +31,12 @@ class App extends React.Component<{}, State> {
     super(props);
 
     this.endLecture = this.endLecture.bind(this);
+    this.selectPresentation = this.selectPresentation.bind(this);
+    this.closePresentation = this.closePresentation.bind(this);
+
     this.state = {
-      currPage: 'dashboard'
+      currPage: 'dashboard',
+      selectedPresentation: null
     };
   }
 
@@ -40,6 +47,14 @@ class App extends React.Component<{}, State> {
   startLecture() {
     this.setState({currPage: 'dashboard'});
     fire.database().ref('lectures/1').update({'in_progress': true});
+  }
+
+  selectPresentation(presentation: Presentation) {
+    this.setState({selectedPresentation: presentation});
+  }
+
+  closePresentation() {
+    this.setState({selectedPresentation: null});
   }
 
   endLecture() {
@@ -54,7 +69,14 @@ class App extends React.Component<{}, State> {
           <Header />
         </div>
         <div style={containerStyles}>
-          {this.state.currPage === 'dashboard' ? <Dashboard endLecture={this.endLecture} /> : <Summary />}
+          {
+            this.state.currPage === 'dashboard' ?
+              <Dashboard endLecture={this.endLecture}
+                         selectPresentation={this.selectPresentation}
+                         closePresentation={this.closePresentation}
+                         selectedPresentation={this.state.selectedPresentation} /> :
+              <Summary selectedPresentation={this.state.selectedPresentation} />
+          }
         </div>
       </div>
     );
