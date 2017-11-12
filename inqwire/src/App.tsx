@@ -3,7 +3,8 @@ import api from './firebase';
 
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
-import Summary from './components/Summary';
+// import Summary from './components/Summary';
+import Summary from './components/SummaryNew';
 
 import { Presentation } from './models';
 
@@ -22,7 +23,7 @@ const containerStyles = {
 };
 
 interface State {
-  currPage: 'login' | 'dashboard' | 'summary' | 'history';
+  currPage: 'login' | 'courses' | 'dashboard' | 'summary' | 'history';
   selectedPresentation: Presentation | null;
 }
 
@@ -73,7 +74,7 @@ class App extends React.Component<{}, State> {
     return (
       <div style={appStyles}>
         <div style={headerStyles}>
-          <Header />
+          <Header currPage={this.state.currPage} />
         </div>
         <div style={containerStyles}>
           {

@@ -2,8 +2,6 @@ import * as React from 'react';
 
 import RatingBreakdownBar from './RatingBreakdownBar';
 
-// const ratingResultsSample = require('../../assets/rating-results.png');
-
 const flexSpaceBetween = {
   display: 'flex',
   justifyContent: 'space-between' as 'space-between',
@@ -92,7 +90,7 @@ class RatingResults extends React.Component<Props, State> {
     this.setState({
       totalStudents: newProps.ratings.length,
       ratingBreakdowns: newRatings
-    })
+    });
   }
 
   render() {
