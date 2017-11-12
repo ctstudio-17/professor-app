@@ -1,5 +1,5 @@
 import * as React from 'react';
-import fire from './firebase';
+import api from './firebase';
 
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
@@ -46,20 +46,27 @@ class App extends React.Component<{}, State> {
 
   startLecture() {
     this.setState({currPage: 'dashboard'});
-    fire.database().ref('lectures/1').update({'in_progress': true});
+    api.startLecture();
+
+    api.getPresentation().then((snapshot: any) => {
+      const presentation = snapshot.val();
+      this.setState({ selectedPresentation: presentation });
+    });
   }
 
   selectPresentation(presentation: Presentation) {
     this.setState({selectedPresentation: presentation});
+    api.setPresentation(presentation);
   }
 
   closePresentation() {
     this.setState({selectedPresentation: null});
+    api.closePresentation();
   }
 
   endLecture() {
     this.setState({currPage: 'summary'});
-    fire.database().ref('lectures/1').update({'in_progress': false});
+    api.endLecture();
   }
 
   render() {

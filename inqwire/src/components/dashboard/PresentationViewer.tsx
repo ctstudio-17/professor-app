@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as GoogleApi from '../shared/GoogleApiInterface';
 
+import api from '../../firebase';
 import { Presentation, Slide } from '../../models';
 
 const presentationIcon = require('../../assets/presentation-icon.svg');
@@ -57,57 +58,86 @@ interface State {
   currentSlideImgSrc: string;
   totalSlides: number;
   slides: Slide[];
+  cached: boolean[];
 }
 
 class PresentationViewer extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
+    this.openInNewWindow = this.openInNewWindow.bind(this);
 
+    if (props.presentation.currentPage >= 0) {
+      this.state = {
+        currentMode: 'Presentation',
+        currentSlide: props.presentation.currentPage,
+        currentSlideImgSrc: props.presentation.slides[props.presentation.currentPage].thumbnailUrl,
+        totalSlides: props.presentation.slides.length,
+        slides: props.presentation.slides,
+        cached: Array(props.presentation.slides.length).fill(false)
+      };
+      this.setPage(this.state.currentSlide);
+    } else {
+      this.state = {
+        currentMode: 'Presentation',
+        currentSlide: -1,
+        currentSlideImgSrc: '',
+        totalSlides: 0,
+        slides: [],
+        cached: []
+      };
+      this.loadPresentation();
+    }
+  }
+
+  loadPresentation() {
     GoogleApi.getPresentation(this.props.presentation.id).then((response: any) => {
       this.setState({
-        currentSlide: 1,
-        slides: response.result.slides.map((slide: any) => ({cached: false, slideId: slide.objectId, studentsConfused: 0})),
-        totalSlides: response.result.slides.length
+        currentSlide: 0,
+        slides: response.result.slides.map((slide: any) => ({slideId: slide.objectId, thumbnailUrl: '', studentsConfused: 0})),
+        totalSlides: response.result.slides.length,
+        cached: Array(response.result.slides.length).fill(false)
       });
 
-      GoogleApi.getSlideThumbnail(this.props.presentation.id, this.state.slides[0].slideId).then((res: any) => {
-        this.setState({
-          currentSlideImgSrc: res.result.contentUrl
-        });
-
-        // Cache the first 10 slide thumbnails
-        this.cacheThumbnails(1, 10);
-      });
+      api.setSlides(this.props.presentation.id, this.state.slides);
+      this.setPage(0);
     });
-
-    this.state = {
-      currentMode: 'Presentation',
-      currentSlide: 0,
-      currentSlideImgSrc: '',
-      totalSlides: 0,
-      slides: []
-    };
   }
 
   cacheThumbnails(start: number, end: number) {
-    this.state.slides.slice(start, end).map((slide: Slide) => {
-      if (!slide.cached) {
+    this.state.slides.slice(start, end).map((slide: Slide, i: number) => {
+      if (!this.state.cached[start + i]) {
         GoogleApi.getSlideThumbnail(this.props.presentation.id, slide.slideId).then((res: any) => {
-          slide.cached = true;
+          api.setSlideThumbnail(start + i, res.result.contentUrl);
+          this.state.slides[start + i].thumbnailUrl = res.result.contentUrl;
+          this.state.cached[start + i] = true;
         });
       }
     });
   }
 
+  openInNewWindow() {
+    window.open(this.props.presentation.webViewLink);
+  }
+
   setPage(page: number) {
-    if (page < 1 || page > this.state.totalSlides) { return; }
-    GoogleApi.getSlideThumbnail(this.props.presentation.id, this.state.slides[page - 1].slideId).then((res: any) => {
-      this.setState({
-        currentSlide: page,
-        currentSlideImgSrc: res.result.contentUrl
+    if (page < 0 || page > this.state.totalSlides) { return; }
+    if (this.state.slides[page].thumbnailUrl) {
+      this.updatePage(page, this.state.slides[page].thumbnailUrl);
+    } else {
+      GoogleApi.getSlideThumbnail(this.props.presentation.id, this.state.slides[page].slideId).then((res: any) => {
+        api.setSlideThumbnail(page, res.result.contentUrl);
+        this.updatePage(page, res.result.contentUrl);
       });
-      this.cacheThumbnails(page, Math.min(this.state.totalSlides, page + 10));
+    }
+  }
+
+  updatePage(page: number, url: string) {
+    api.setCurrentSlide(page);
+    this.setState({
+      currentSlide: page,
+      currentSlideImgSrc: url
     });
+    this.cacheThumbnails(page, Math.min(this.state.totalSlides, page + 10));
   }
 
   render() {
@@ -116,16 +146,16 @@ class PresentationViewer extends React.Component<Props, State> {
         <img src={this.state.currentSlideImgSrc} style={slideStyles} />
 
         <div style={detailsBarStyles}>
-          <div style={slidesModeStyles}>
+          <div style={slidesModeStyles} onClick={this.openInNewWindow}>
             <img src={presentationIcon} style={imgStyles} />
             <span>{this.state.currentMode} Mode</span>
           </div>
           <div style={slideCounterStyles}>
-            <div style={{cursor: this.state.currentSlide <= 1 ? 'not-allowed' : 'pointer'}}
+            <div style={{cursor: this.state.currentSlide <= 0 ? 'not-allowed' : 'pointer'}}
                  onClick={() => this.setPage(this.state.currentSlide - 1)}>
               &lt;
             </div>
-            <div style={{margin: '0 10px'}}>{this.state.currentSlide} of {this.state.totalSlides}</div>
+            <div style={{margin: '0 10px'}}>{this.state.currentSlide + 1} of {this.state.totalSlides}</div>
             <div style={{cursor: this.state.currentSlide >= this.state.totalSlides ? 'not-allowed' : 'pointer'}}
                  onClick={() => this.setPage(this.state.currentSlide + 1)}>
               &gt;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import fire from '../../firebase';
+import api from '../../firebase';
 
 import PigmentBar from './PigmentBar';
 
@@ -42,7 +42,7 @@ class ConfusingStudents extends React.Component<{}, State> {
   }
 
   initStudents() {
-    const studentsRef = fire.database().ref('classes/1/students');
+    const studentsRef = api.getStudentRef();
     studentsRef.once('value', (snapshot: any) => {
       this.setState({ numTotalStudents: snapshot.numChildren() });
     });
@@ -50,7 +50,7 @@ class ConfusingStudents extends React.Component<{}, State> {
 
   initConfusions() {
     /* Create reference to messages in Firebase Database */
-    const confusionsRef = fire.database().ref('lectures/1/confusions');
+    const confusionsRef = api.getConfusionRef();
     confusionsRef.on('child_added', (snapshot: any) => {
       // const currSlide = document.getElementsByClassName('goog-flat-menu-button-caption')[0].textContent.trim().split(' ')[1];
 

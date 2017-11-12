@@ -51,7 +51,7 @@ class FeedbackResults extends React.Component<Props, {}> {
       <div style={feedbackListStyles}>
         {
           this.props.feedback.map((feedback: string, i: number) => {
-            return <div key={i} style={feedbackRowStyles}>{feedback}</div>;
+            return feedback ? <div key={i} style={feedbackRowStyles}>{feedback}</div> : '';
           })
         }
       </div>

@@ -1,5 +1,5 @@
 export interface Slide {
-  cached: boolean;
   slideId: string;
+  thumbnailUrl: string;
   studentsConfused: number;
 }

@@ -53,25 +53,46 @@ const breakdownHeaderStyles = {
   lineHeight: '1.36',
   letterSpacing: '2px'
 };
-interface State {
+interface Props {
   ratings: number[];
+}
+interface State {
   totalStudents: number;
+  ratingBreakdowns: number[];
 }
 
 const ratingOpacities = [0.1, 0.23, 0.36, 0.73, 1];
 const arrToAvg = (arr: number[]) => {
-  return (arr.reduce( ( p, c ) => p + c, 0 ) / arr.length).toFixed(2);
+  return arr.length ? (arr.reduce( ( p, c ) => p + c, 0 ) / arr.length).toFixed(2) : '0.00';
 };
 
-class RatingResults extends React.Component<{}, State> {
-  constructor(props: {}) {
+class RatingResults extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
-      // ratings: Array(5).fill(0),
-      ratings: [1, 4, 6, 2, 9],
-      totalStudents: 22
+      totalStudents: 0,
+      ratingBreakdowns: Array(5).fill(0)
     };
+  }
+
+  componentWillReceiveProps(newProps: Props) {
+    let newRatings: number[];
+    if (newProps.ratings.length === this.state.totalStudents + 1) {
+      const r = newProps.ratings[newProps.ratings.length - 1];
+      newRatings = this.state.ratingBreakdowns.slice();
+      newRatings[r - 1] += 1;
+    } else {
+      newRatings = Array(5).fill(0);
+      for (const rating of newProps.ratings) {
+        newRatings[rating - 1] += 1;
+      }
+    }
+
+    this.setState({
+      totalStudents: newProps.ratings.length,
+      ratingBreakdowns: newRatings
+    })
   }
 
   render() {
@@ -80,7 +101,7 @@ class RatingResults extends React.Component<{}, State> {
         <div style={headerContainerStyles}>
           <div style={headerStyles}>Rating of Lecture</div>
           <div style={averageRatingContainerStyles}>
-            <div style={averageRatingStyles}>{arrToAvg(this.state.ratings)}</div>
+            <div style={averageRatingStyles}>{arrToAvg(this.props.ratings)}</div>
             <div style={averageRatingFooterStyles}>out of 5</div>
           </div>
         </div>
@@ -88,14 +109,14 @@ class RatingResults extends React.Component<{}, State> {
         <div style={breakdownContainerStyles}>
           <div style={breakdownHeaderStyles}>Rating Breakdown:</div>
           {
-            this.state.ratings.map((numStudents: number, i: number) => <RatingBreakdownBar key={i}
-                                                                                           opacity={ratingOpacities[i]}
-                                                                                           numStars={i + 1}
-                                                                                           numStudents={numStudents}
-                                                                                           totalStudents={this.state.totalStudents} />)
+            this.state.ratingBreakdowns.map((numStudents: number, i: number) =>
+              <RatingBreakdownBar key={i}
+                                  opacity={ratingOpacities[i]}
+                                  numStars={i + 1}
+                                  numStudents={numStudents}
+                                  totalStudents={this.state.totalStudents} />)
           }
         </div>
-      {/* <img src={ratingResultsSample} style={{height: '100%', width: '100%'}} /> */}
       </div>
     );
   }

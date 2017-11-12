@@ -48,7 +48,7 @@ class PigmentBar extends React.Component<Props, State> {
   render() {
     return (
       <div >
-        <div id='bar-container' style={divStyles}></div>
+        <div id='bar-container' style={divStyles} />
       </div>
     );
   }

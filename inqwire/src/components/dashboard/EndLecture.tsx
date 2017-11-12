@@ -69,6 +69,7 @@ interface Props {
   endLecture: any;
 }
 interface State {
+  intervalId: number;
   minutes: number;
   seconds: number;
 }
@@ -77,6 +78,7 @@ class EndLecture extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      intervalId: -1,
       minutes: 0,
       seconds: 0
     };
@@ -95,7 +97,8 @@ class EndLecture extends React.Component<Props, State> {
       minutes: 0,
       seconds: 0
     });
-    setInterval(this.updateTime.bind(this), 1000);
+    const intervalId = setInterval(this.updateTime.bind(this), 1000);
+    this.setState({ intervalId });
   }
 
   render() {
@@ -119,6 +122,10 @@ class EndLecture extends React.Component<Props, State> {
         </div>
       </div>
     );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId);
   }
 }
 

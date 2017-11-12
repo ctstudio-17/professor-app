@@ -37,7 +37,13 @@ class GoogleSlidesPicker extends React.Component<Props, State> {
     GoogleApi.getPresentations('').then((response: any) => {
       this.setState({
         currPage: 1,
-        presentations: response.result.files,
+        presentations: response.result.files.map((pres: any) => {
+          return {
+            ...pres,
+            currentPage: -1,
+            slides: []
+          };
+        }),
         nextPageToken: response.result.nextPageToken
       });
     });
