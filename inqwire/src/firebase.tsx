@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 
-import { Presentation, Slide } from './models';
+import { Poll, Presentation, Slide } from './models';
 
 class FirebaseApi {
   fire: any;
@@ -35,12 +35,17 @@ class FirebaseApi {
   setSlideThumbnail = (page: number, url: string) =>
     this.fire.database().ref(`lectures/${this.lectureId}/presentation/slides/${page}`).update({thumbnailUrl: url})
 
-  getStudentRef = () =>
-    this.fire.database().ref(`classes/${this.classId}/students`)
+  createPoll = (poll: Poll) =>
+    this.fire.database().ref(`lectures/${this.lectureId}/polls`).push(poll)
+
   getConfusionRef = () =>
     this.fire.database().ref(`lectures/${this.lectureId}/confusions`)
   getFeedbackRef = () =>
     this.fire.database().ref(`lectures/${this.lectureId}/feedback`)
+  getPollResponseRef = (key: string) =>
+    this.fire.database().ref(`lectures/${this.lectureId}/polls/${key}/responses`)
+  getStudentRef = () =>
+    this.fire.database().ref(`classes/${this.classId}/students`)
 }
 
 function initApi() {

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as GoogleApi from './shared/GoogleApiInterface';
+import api from '../firebase';
 
 import Button from './shared/Button';
 import CreatePoll from './dashboard/CreatePoll';
@@ -9,7 +10,7 @@ import GoogleSlidesPicker from './dashboard/GoogleSlidesPicker';
 import PollResults from './dashboard/PollResults';
 import PresentationViewer from './dashboard/PresentationViewer';
 
-import { Presentation } from '../models';
+import { Poll, Presentation } from '../models';
 
 const dashboardStyles = {
   height: '100%',
@@ -78,8 +79,17 @@ class Dashboard extends React.Component<Props, State> {
     }
   }
 
-  startPoll() {
+  startPoll(poll: Poll) {
+    const pollKey = api.createPoll({
+      ...poll,
+      responses: []
+    }).key;
     this.setState({pollRunning: true});
+    api.getPollResponseRef(pollKey).on('child_added', this.onPollResponse.bind(this));
+  }
+
+  onPollResponse(snapshot: any) {
+    console.log(snapshot.val());
   }
 
   render() {

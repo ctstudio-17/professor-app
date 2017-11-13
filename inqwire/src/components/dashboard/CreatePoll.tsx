@@ -4,6 +4,13 @@ import Button from '../shared/Button';
 import PollAnswer from './PollAnswer';
 
 const clockIcon = require('../../assets/clock-icon.svg');
+const understandingPoll = {
+  pollTime: 1,
+  questionText: 'Do you understand?',
+  answers: ['Yes', 'No', '', ''],
+  correctAns: [false, false, false, false]
+};
+
 const pollContainerStyles = {
   width: '100%',
   height: '100%',
@@ -113,12 +120,8 @@ class CreatePoll extends React.Component<Props, State> {
     });
   }
   checkUnderstanding() {
-    this.setState({
-      questionText: 'Do you understand?',
-      answers: ['Yes', 'No', '', ''],
-      correctAns: [false, false, false, false]
-    });
-    this.props.startPoll();
+    this.setState(understandingPoll);
+    this.props.startPoll(understandingPoll);
   }
 
   render() {
@@ -162,7 +165,7 @@ class CreatePoll extends React.Component<Props, State> {
                   backgroundColor='#bbbbbb'
                   textColor='#ffffff'
                   buttonText={'START POLL'}
-                  handleButtonClick={this.props.startPoll} />
+                  handleButtonClick={() => this.props.startPoll(this.state)} />
         </div>
 
         <div style={{height: '1px', width: '100%', backgroundColor: 'black'}} />
