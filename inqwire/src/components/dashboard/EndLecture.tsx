@@ -65,7 +65,10 @@ const timeLabelStyles = {
   justifyContent: 'space-between' as 'space-between'
 };
 
+const convertDateToSeconds = (date: Date) => parseInt(String(date.getTime() / 1000), 10);
+
 interface Props {
+  startTime?: Date;
   endLecture: any;
 }
 interface State {
@@ -77,11 +80,21 @@ interface State {
 class EndLecture extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      intervalId: -1,
-      minutes: 0,
-      seconds: 0
-    };
+
+    if (props.startTime) {
+      const passedTime = convertDateToSeconds(new Date()) - convertDateToSeconds(props.startTime);
+      this.state = {
+        intervalId: -1,
+        minutes: parseInt(String(passedTime / 60), 10),
+        seconds: passedTime % 60
+      };
+    } else {
+      this.state = {
+        intervalId: -1,
+        minutes: 0,
+        seconds: 0
+      };
+    }
   }
 
   updateTime() {
@@ -93,10 +106,6 @@ class EndLecture extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    this.setState({
-      minutes: 0,
-      seconds: 0
-    });
     const intervalId = setInterval(this.updateTime.bind(this), 1000);
     this.setState({ intervalId });
   }
@@ -114,7 +123,7 @@ class EndLecture extends React.Component<Props, State> {
 
         <div style={timeContainerStyles}>
           <div style={timeStyles}>
-            <span>{('0' + this.state.minutes).slice(-2)}</span>
+            <span>{this.state.minutes < 10 ? '0' + this.state.minutes : this.state.minutes}</span>
             <span>:</span>
             <span>{('0' + this.state.seconds).slice(-2)}</span>
           </div>

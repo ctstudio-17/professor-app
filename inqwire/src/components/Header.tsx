@@ -32,6 +32,7 @@ const linkStyles = {
 
 interface Props {
   currPage: string;
+  setPage: any;
 }
 
 class Header extends React.Component<Props, {}> {
@@ -39,8 +40,13 @@ class Header extends React.Component<Props, {}> {
     return (
       <div style={headerStyles}>
         <div style={{...linkContainerStyles, width: '12.1%'}}>
-          <div style={{...linkStyles, color: this.props.currPage  === 'dashboard' ? 'black' : 'inherit'}}>DASHBOARD</div>
-          <div style={{...linkStyles, color: this.props.currPage  === 'courses' ? 'black' : 'inherit'}}>COURSES</div>
+          <div style={{...linkStyles, color: this.props.currPage  === 'classes' ? 'black' : 'inherit'}}
+               onClick={() => this.props.setPage('classes')}>
+            HOME
+          </div>
+          <div style={{...linkStyles, color: this.props.currPage  === 'dashboard' ? 'black' : 'inherit'}}>
+            DASHBOARD
+          </div>
         </div>
 
         <div style={titleStyles}>inQwire</div>

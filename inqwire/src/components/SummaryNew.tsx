@@ -23,7 +23,7 @@ const colStyles = {
 };
 
 interface Props {
-  selectedPresentation: Presentation | null;
+  selectedPresentation: Presentation | undefined;
 }
 interface State {
   feedback: string[];

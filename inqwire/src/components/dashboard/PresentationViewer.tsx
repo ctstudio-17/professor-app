@@ -75,7 +75,7 @@ class PresentationViewer extends React.Component<Props, State> {
         slides: props.presentation.slides,
         cached: Array(props.presentation.slides.length).fill(false)
       };
-      this.setPage(this.state.currentSlide);
+      this.setPage(props.presentation.currentPage);
     } else {
       this.state = {
         currentMode: 'Presentation',

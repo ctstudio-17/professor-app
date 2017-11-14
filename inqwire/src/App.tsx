@@ -3,10 +3,12 @@ import api from './firebase';
 
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
+import Classes from './components/Classes';
+import Lectures from './components/Lectures';
 // import Summary from './components/Summary';
 import Summary from './components/SummaryNew';
 
-import { Presentation } from './models';
+import { Lecture, Presentation } from './models';
 
 const appStyles = {
   height: '100%',
@@ -23,31 +25,56 @@ const containerStyles = {
 };
 
 interface State {
-  currPage: 'login' | 'courses' | 'dashboard' | 'summary' | 'history';
-  selectedPresentation: Presentation | null;
+  currPage: 'login' | 'classes' | 'lectures' | 'dashboard' | 'summary' | 'history';
+  lectureStartTime?: Date;
+  selectedPresentation: Presentation | undefined;
 }
 
 class App extends React.Component<{}, State> {
   constructor(props: {}) {
     super(props);
 
+    this.setPage = this.setPage.bind(this);
+    this.selectClass = this.selectClass.bind(this);
+    this.selectLecture = this.selectLecture.bind(this);
+    this.startLecture = this.startLecture.bind(this);
     this.endLecture = this.endLecture.bind(this);
     this.selectPresentation = this.selectPresentation.bind(this);
     this.closePresentation = this.closePresentation.bind(this);
 
     this.state = {
-      currPage: 'dashboard',
-      selectedPresentation: null
+      currPage: 'classes',
+      selectedPresentation: undefined
     };
   }
 
   componentDidMount() {
-    this.startLecture();
+    // this.startLecture();
+  }
+
+  setPage(page: 'login' | 'classes' | 'lectures' | 'dashboard' | 'summary' | 'history') {
+    this.setState({
+      currPage: page
+    });
+  }
+
+  selectClass(id: number) {
+    api.setClass(id);
+    this.setState({currPage: 'lectures'});
+  }
+
+  selectLecture(lecture: Lecture) {
+    api.setLecture(lecture.id);
+    this.setState({
+      currPage: lecture.inProgress ? 'dashboard' : 'summary',
+      lectureStartTime: lecture.startTime,
+      selectedPresentation: lecture.presentation
+    });
   }
 
   startLecture() {
-    this.setState({currPage: 'dashboard'});
     api.startLecture();
+    this.setState({currPage: 'dashboard'});
 
     api.getPresentation().then((snapshot: any) => {
       const presentation = snapshot.val();
@@ -61,7 +88,7 @@ class App extends React.Component<{}, State> {
   }
 
   closePresentation() {
-    this.setState({selectedPresentation: null});
+    this.setState({selectedPresentation: undefined});
     api.closePresentation();
   }
 
@@ -71,20 +98,33 @@ class App extends React.Component<{}, State> {
   }
 
   render() {
+    let page;
+    switch (this.state.currPage) {
+      case 'dashboard':
+        page = <Dashboard endLecture={this.endLecture}
+                          selectPresentation={this.selectPresentation}
+                          closePresentation={this.closePresentation}
+                          selectedPresentation={this.state.selectedPresentation}
+                          startTime={this.state.lectureStartTime} />;
+        break;
+      case 'summary':
+        page = <Summary selectedPresentation={this.state.selectedPresentation} />;
+        break;
+      case 'lectures':
+        page = <Lectures selectLecture={this.selectLecture} startLecture={this.startLecture} />;
+        break;
+      case 'classes':
+      default:
+        page = <Classes selectClass={this.selectClass} />;
+    }
+
     return (
       <div style={appStyles}>
         <div style={headerStyles}>
-          <Header currPage={this.state.currPage} />
+          <Header currPage={this.state.currPage} setPage={this.setPage} />
         </div>
         <div style={containerStyles}>
-          {
-            this.state.currPage === 'dashboard' ?
-              <Dashboard endLecture={this.endLecture}
-                         selectPresentation={this.selectPresentation}
-                         closePresentation={this.closePresentation}
-                         selectedPresentation={this.state.selectedPresentation} /> :
-              <Summary selectedPresentation={this.state.selectedPresentation} />
-          }
+          { page }
         </div>
       </div>
     );

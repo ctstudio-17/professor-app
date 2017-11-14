@@ -5,47 +5,68 @@ import { Poll, Presentation, Slide } from './models';
 class FirebaseApi {
   fire: any;
   classId: number;
-  lectureId: number;
+  lectureId: string;
+
+  classPath = () => `classes/${this.classId}`;
+  lecturePath = () => `${this.classPath()}/lectures/${this.lectureId}`;
 
   constructor(fireObj: any) {
     this.fire = fireObj;
-    this.setClass(1);
-    this.setLecture(1);
   }
 
-  setClass = (id: number) => this.classId = id;
-  setLecture = (id: number) => this.lectureId = id;
+  getCurrentTime = () => parseInt(String(new Date().getTime() / 1000), 10);
 
-  startLecture = () =>
-    this.fire.database().ref(`lectures/${this.lectureId}`).update({'in_progress': true})
-  endLecture = () =>
-    this.fire.database().ref(`lectures/${this.lectureId}`).update({'in_progress': false})
+  getAllClasses = () =>
+    this.fire.database().ref(`classes`)
+  setClass = (id: number) => this.classId = id;
+
+  getAllLectures = () =>
+    this.fire.database().ref(`${this.classPath()}/lectures`)
+  getLecture = (id: string) =>
+    this.fire.database().ref(`${this.classPath()}/lectures/${id}`)
+  setLecture = (id: string) => this.lectureId = id;
+
+  getLastLecture = () =>
+    this.fire.database().ref(`${this.classPath()}/lectures`).limitToLast(1)
+  isLectureRunning = (id: string) =>
+    this.fire.database().ref(`${this.classPath()}/lectures/${id}/in_progress`)
+  startLecture = () => {
+    const ref = this.fire.database().ref(`${this.classPath()}/lectures`).push({
+      in_progress: true,
+      start_time: this.getCurrentTime()
+    });
+    this.setLecture(ref.key);
+  }
+  endLecture = () => {
+    this.fire.database().ref(`${this.lecturePath()}`).update({
+      in_progress: false,
+      end_time: this.getCurrentTime()
+    });
+  }
 
   getPresentation = () =>
-    this.fire.database().ref(`lectures/${this.lectureId}/presentation`).once('value')
+    this.fire.database().ref(`${this.lecturePath()}/presentation`).once('value')
 
   setPresentation = (presentation: Presentation) =>
-    this.fire.database().ref(`lectures/${this.lectureId}`).update({ presentation })
+    this.fire.database().ref(`${this.lecturePath()}`).update({ presentation })
   closePresentation = () =>
-    this.fire.database().ref(`lectures/${this.lectureId}/presentation`).remove()
+    this.fire.database().ref(`${this.lecturePath()}/presentation`).remove()
   setSlides = (id: string, slides: Slide[]) =>
-    this.fire.database().ref(`lectures/${this.lectureId}/presentation`).update({ slides })
+    this.fire.database().ref(`${this.lecturePath()}/presentation`).update({ slides })
   setCurrentSlide = (page: number) =>
-    this.fire.database().ref(`lectures/${this.lectureId}/presentation`).update({ currentPage: page })
+    this.fire.database().ref(`${this.lecturePath()}/presentation`).update({ currentPage: page })
   setSlideThumbnail = (page: number, url: string) =>
-    this.fire.database().ref(`lectures/${this.lectureId}/presentation/slides/${page}`).update({thumbnailUrl: url})
+    this.fire.database().ref(`${this.lecturePath()}/presentation/slides/${page}`).update({thumbnailUrl: url})
 
   createPoll = (poll: Poll) =>
-    this.fire.database().ref(`lectures/${this.lectureId}/polls`).push(poll)
+    this.fire.database().ref(`${this.lecturePath()}/polls`).push(poll)
 
   getConfusionRef = () =>
-    this.fire.database().ref(`lectures/${this.lectureId}/confusions`)
+    this.fire.database().ref(`${this.lecturePath()}/confusions`)
   getFeedbackRef = () =>
-    this.fire.database().ref(`lectures/${this.lectureId}/feedback`)
+    this.fire.database().ref(`${this.lecturePath()}/feedback`)
   getPollResponseRef = (key: string) =>
-    this.fire.database().ref(`lectures/${this.lectureId}/polls/${key}/responses`)
-  getStudentRef = () =>
-    this.fire.database().ref(`classes/${this.classId}/students`)
+    this.fire.database().ref(`${this.lecturePath()}/polls/${key}/responses`)
 }
 
 function initApi() {

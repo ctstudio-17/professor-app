@@ -28,24 +28,16 @@ interface State {
   numTotalStudents: number;
 }
 
-class ConfusingStudents extends React.Component<{}, State> {
+class ConfusedStudents extends React.Component<{}, State> {
   constructor(props: {}) {
     super(props);
 
-    this.initStudents();
     this.initConfusions();
 
     this.state = {
       numConfusedStudents: [],
-      numTotalStudents: 1,
+      numTotalStudents: 10,
     };
-  }
-
-  initStudents() {
-    const studentsRef = api.getStudentRef();
-    studentsRef.once('value', (snapshot: any) => {
-      this.setState({ numTotalStudents: snapshot.numChildren() });
-    });
   }
 
   initConfusions() {
@@ -80,4 +72,4 @@ class ConfusingStudents extends React.Component<{}, State> {
   }
 }
 
-export default ConfusingStudents;
+export default ConfusedStudents;

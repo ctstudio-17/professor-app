@@ -38,7 +38,8 @@ interface Props {
   endLecture: any;
   selectPresentation: any;
   closePresentation: any;
-  selectedPresentation: Presentation | null;
+  startTime?: Date;
+  selectedPresentation: Presentation | undefined;
 }
 interface State {
   pollRunning: boolean;
@@ -118,7 +119,7 @@ class Dashboard extends React.Component<Props, State> {
               <ConfusedStudents />
             </div>
             <div style={{height: '12.0%'}}>
-              <EndLecture endLecture={this.props.endLecture} />
+              <EndLecture endLecture={this.props.endLecture} startTime={this.props.startTime} />
             </div>
           </div>
         </div>
