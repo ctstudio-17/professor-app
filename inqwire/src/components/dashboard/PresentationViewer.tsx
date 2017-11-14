@@ -59,6 +59,7 @@ interface State {
   totalSlides: number;
   slides: Slide[];
   cached: boolean[];
+  cachingId?: any;
 }
 
 class PresentationViewer extends React.Component<Props, State> {
@@ -76,6 +77,7 @@ class PresentationViewer extends React.Component<Props, State> {
         cached: Array(props.presentation.slides.length).fill(false)
       };
       this.setPage(props.presentation.currentPage);
+      this.cacheAllThumbnails();
     } else {
       this.state = {
         currentMode: 'Presentation',
@@ -100,7 +102,22 @@ class PresentationViewer extends React.Component<Props, State> {
 
       api.setSlides(this.props.presentation.id, this.state.slides);
       this.setPage(0);
+      this.cacheAllThumbnails();
     });
+  }
+
+  cacheAllThumbnails() {
+    this.cacheThumbnails(0, Math.min(this.state.totalSlides, 10));
+    let start = 10;
+    const id = setInterval(() => {
+      if (start > this.state.slides.length) {
+        clearInterval(id);
+      } else {
+        this.cacheThumbnails(start, Math.min(this.state.totalSlides, start + 5));
+        start += 5;
+      }
+    }, 5000);
+    this.setState({cachingId: id});
   }
 
   cacheThumbnails(start: number, end: number) {
@@ -165,6 +182,10 @@ class PresentationViewer extends React.Component<Props, State> {
         </div>
       </div>
     );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.cachingId);
   }
 }
 
