@@ -5,8 +5,7 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Classes from './components/Classes';
 import Lectures from './components/Lectures';
-// import Summary from './components/Summary';
-import Summary from './components/SummaryNew';
+import Summary from './components/Summary';
 
 import { Lecture, Presentation } from './models';
 
@@ -46,10 +45,6 @@ class App extends React.Component<{}, State> {
       currPage: 'classes',
       selectedPresentation: undefined
     };
-  }
-
-  componentDidMount() {
-    // this.startLecture();
   }
 
   setPage(page: 'login' | 'classes' | 'lectures' | 'dashboard' | 'summary' | 'history') {
