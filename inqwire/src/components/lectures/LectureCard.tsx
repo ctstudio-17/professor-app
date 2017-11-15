@@ -12,9 +12,9 @@ const containerStyles = {
   cursor: 'pointer'
 };
 
-const parseDate = (date: any) => {
+const parseTime = (date: any) => {
   const a = date.getHours() > 12 ? 'PM' : 'AM';
-  return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()} ${date.getHours() % 12}:${date.getMinutes()}${a}`;
+  return `${date.getHours() % 12}:${date.getMinutes()}${a}`;
 };
 
 interface Props {
@@ -32,7 +32,10 @@ class LectureCard extends React.Component<Props, {}> {
         {
           this.props.inProgress ?
             'In Progress' :
-            `${parseDate(this.props.startTime)} - ${parseDate(this.props.endTime)}`
+            <div>
+              <span>{this.props.startTime.toLocaleDateString()}</span>
+              <span style={{display: 'block'}}>{parseTime(this.props.startTime)} - {parseTime(this.props.endTime)}</span>
+            </div>
         }
       </div>
     );

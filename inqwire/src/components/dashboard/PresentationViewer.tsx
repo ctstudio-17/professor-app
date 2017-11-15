@@ -50,11 +50,12 @@ const slideCounterStyles = {
 
 interface Props {
   presentation: Presentation;
+  currentSlide: number;
   closePresentation: any;
+  updateSlide: any;
 }
 interface State {
   currentMode: string;
-  currentSlide: number;
   currentSlideImgSrc: string;
   totalSlides: number;
   slides: Slide[];
@@ -70,31 +71,29 @@ class PresentationViewer extends React.Component<Props, State> {
     if (props.presentation.currentPage >= 0) {
       this.state = {
         currentMode: 'Presentation',
-        currentSlide: props.presentation.currentPage,
         currentSlideImgSrc: props.presentation.slides[props.presentation.currentPage].thumbnailUrl,
         totalSlides: props.presentation.slides.length,
         slides: props.presentation.slides,
         cached: Array(props.presentation.slides.length).fill(false)
       };
       this.setPage(props.presentation.currentPage);
-      this.cacheAllThumbnails();
+      setTimeout(() => this.cacheAllThumbnails(), 0);
     } else {
       this.state = {
         currentMode: 'Presentation',
-        currentSlide: -1,
         currentSlideImgSrc: '',
         totalSlides: 0,
         slides: [],
         cached: []
       };
-      this.loadPresentation();
+      setTimeout(() => this.loadPresentation(), 0);
     }
   }
 
   loadPresentation() {
     GoogleApi.getPresentation(this.props.presentation.id).then((response: any) => {
+      this.props.updateSlide(0);
       this.setState({
-        currentSlide: 0,
         slides: response.result.slides.map((slide: any) => ({slideId: slide.objectId, thumbnailUrl: '', studentsConfused: 0})),
         totalSlides: response.result.slides.length,
         cached: Array(response.result.slides.length).fill(false)
@@ -150,8 +149,8 @@ class PresentationViewer extends React.Component<Props, State> {
 
   updatePage(page: number, url: string) {
     api.setCurrentSlide(page);
+    this.props.updateSlide(page);
     this.setState({
-      currentSlide: page,
       currentSlideImgSrc: url
     });
     this.cacheThumbnails(page, Math.min(this.state.totalSlides, page + 10));
@@ -168,13 +167,13 @@ class PresentationViewer extends React.Component<Props, State> {
             <span>{this.state.currentMode} Mode</span>
           </div>
           <div style={slideCounterStyles}>
-            <div style={{cursor: this.state.currentSlide <= 0 ? 'not-allowed' : 'pointer'}}
-                 onClick={() => this.setPage(this.state.currentSlide - 1)}>
+            <div style={{cursor: this.props.currentSlide <= 0 ? 'not-allowed' : 'pointer'}}
+                 onClick={() => this.setPage(this.props.currentSlide - 1)}>
               &lt;
             </div>
-            <div style={{margin: '0 10px'}}>{this.state.currentSlide + 1} of {this.state.totalSlides}</div>
-            <div style={{cursor: this.state.currentSlide >= this.state.totalSlides ? 'not-allowed' : 'pointer'}}
-                 onClick={() => this.setPage(this.state.currentSlide + 1)}>
+            <div style={{margin: '0 10px'}}>{this.props.currentSlide + 1} of {this.state.totalSlides}</div>
+            <div style={{cursor: this.props.currentSlide >= this.state.totalSlides ? 'not-allowed' : 'pointer'}}
+                 onClick={() => this.setPage(this.props.currentSlide + 1)}>
               &gt;
             </div>
           </div>

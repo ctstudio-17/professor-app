@@ -4,8 +4,8 @@ import { Poll, Presentation, Slide } from './models';
 
 class FirebaseApi {
   fire: any;
-  classId: number;
-  lectureId: string;
+  classId?: number;
+  lectureId?: string;
 
   classPath = () => `classes/${this.classId}`;
   lecturePath = () => `${this.classPath()}/lectures/${this.lectureId}`;
@@ -18,13 +18,13 @@ class FirebaseApi {
 
   getAllClasses = () =>
     this.fire.database().ref(`classes`)
-  setClass = (id: number) => this.classId = id;
+  setClass = (id?: number) => this.classId = id;
 
   getAllLectures = () =>
     this.fire.database().ref(`${this.classPath()}/lectures`)
   getLecture = (id: string) =>
     this.fire.database().ref(`${this.classPath()}/lectures/${id}`)
-  setLecture = (id: string) => this.lectureId = id;
+  setLecture = (id?: string) => this.lectureId = id;
 
   getLastLecture = () =>
     this.fire.database().ref(`${this.classPath()}/lectures`).limitToLast(1)
@@ -55,8 +55,11 @@ class FirebaseApi {
     this.fire.database().ref(`${this.lecturePath()}/presentation`).update({ slides })
   setCurrentSlide = (page: number) =>
     this.fire.database().ref(`${this.lecturePath()}/presentation`).update({ currentPage: page })
-  setSlideThumbnail = (page: number, url: string) =>
-    this.fire.database().ref(`${this.lecturePath()}/presentation/slides/${page}`).update({thumbnailUrl: url})
+  setSlideThumbnail = (page: number, url: string) => {
+    if (this.classId !== undefined && this.lectureId !== undefined) {
+      this.fire.database().ref(`${this.lecturePath()}/presentation/slides/${page}`).update({thumbnailUrl: url});
+    }
+  }
 
   createPoll = (poll: Poll) =>
     this.fire.database().ref(`${this.lecturePath()}/polls`).push(poll)

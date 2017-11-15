@@ -27,7 +27,7 @@ const containerStyles = {
 interface State {
   currPage: 'login' | 'classes' | 'lectures' | 'dashboard' | 'summary' | 'history';
   lectureStartTime?: Date;
-  selectedPresentation: Presentation | undefined;
+  selectedPresentation?: Presentation;
 }
 
 class App extends React.Component<{}, State> {
@@ -53,6 +53,14 @@ class App extends React.Component<{}, State> {
   }
 
   setPage(page: 'login' | 'classes' | 'lectures' | 'dashboard' | 'summary' | 'history') {
+    if (page === 'classes') {
+      api.setClass(undefined);
+      api.setLecture(undefined);
+      this.setState({
+        lectureStartTime: undefined,
+        selectedPresentation: undefined
+      });
+    }
     this.setState({
       currPage: page
     });

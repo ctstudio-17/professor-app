@@ -44,6 +44,7 @@ interface Props {
 interface State {
   pollRunning: boolean;
   userAuthorized: boolean;
+  currentSlide: number;
 }
 
 class Dashboard extends React.Component<Props, State> {
@@ -53,8 +54,10 @@ class Dashboard extends React.Component<Props, State> {
     this.updateGoogleAuthStatus = this.updateGoogleAuthStatus.bind(this);
     this.handleAuthClick = this.handleAuthClick.bind(this);
     this.startPoll = this.startPoll.bind(this);
+    this.updateSlide = this.updateSlide.bind(this);
 
     this.state = {
+      currentSlide: -1,
       pollRunning: false,
       userAuthorized: false
     };
@@ -93,6 +96,10 @@ class Dashboard extends React.Component<Props, State> {
     console.log(snapshot.val());
   }
 
+  updateSlide(page: number) {
+    this.setState({ currentSlide: page });
+  }
+
   render() {
     return (
       <div style={dashboardStyles}>
@@ -106,7 +113,9 @@ class Dashboard extends React.Component<Props, State> {
                 this.state.userAuthorized ?
                   (this.props.selectedPresentation ?
                     <PresentationViewer presentation={this.props.selectedPresentation}
-                                        closePresentation={this.props.closePresentation} /> :
+                                        currentSlide={this.state.currentSlide}
+                                        closePresentation={this.props.closePresentation}
+                                        updateSlide={this.updateSlide} /> :
                     <GoogleSlidesPicker logOutGoogleAuth={this.handleAuthClick} selectPresentation={this.props.selectPresentation} />) :
                   <Button height='10%'
                           backgroundColor='black'
@@ -116,7 +125,7 @@ class Dashboard extends React.Component<Props, State> {
               }
             </div>
             <div style={{height: '18.5%'}}>
-              <ConfusedStudents />
+              <ConfusedStudents currentSlide={this.state.currentSlide} />
             </div>
             <div style={{height: '12.0%'}}>
               <EndLecture endLecture={this.props.endLecture} startTime={this.props.startTime} />

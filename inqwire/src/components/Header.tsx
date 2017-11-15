@@ -44,9 +44,6 @@ class Header extends React.Component<Props, {}> {
                onClick={() => this.props.setPage('classes')}>
             HOME
           </div>
-          <div style={{...linkStyles, color: this.props.currPage  === 'dashboard' ? 'black' : 'inherit'}}>
-            DASHBOARD
-          </div>
         </div>
 
         <div style={titleStyles}>inQwire</div>

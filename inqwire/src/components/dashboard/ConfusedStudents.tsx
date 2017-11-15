@@ -3,7 +3,9 @@ import api from '../../firebase';
 
 import PigmentBar from './PigmentBar';
 
-const profAvatar = require('../../assets/confusion-icon.svg');
+import { Confusion } from '../../models';
+
+const avatar = require('../../assets/confusion-icon.svg');
 
 const containerStyles = {
   padding: '2.9%',
@@ -23,50 +25,64 @@ const secondLineStyles = {
   fontSize: '14px',
 };
 
+interface Props {
+  currentSlide?: number;
+}
 interface State {
-  numConfusedStudents: string[];
+  confusions: Confusion[];
   numTotalStudents: number;
 }
 
-class ConfusedStudents extends React.Component<{}, State> {
-  constructor(props: {}) {
+class ConfusedStudents extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
-    this.initConfusions();
-
     this.state = {
-      numConfusedStudents: [],
-      numTotalStudents: 10,
+      confusions: [],
+      numTotalStudents: 13
     };
   }
 
+  componentDidMount() {
+    this.initConfusions();
+  }
+
   initConfusions() {
-    /* Create reference to messages in Firebase Database */
     const confusionsRef = api.getConfusionRef();
     confusionsRef.on('child_added', (snapshot: any) => {
-      // const currSlide = document.getElementsByClassName('goog-flat-menu-button-caption')[0].textContent.trim().split(' ')[1];
-
-      /* Update React state when message is added at Firebase Database */
-      const student = snapshot.child('student').val();
-      if ( this.state.numConfusedStudents.indexOf(student) < 0 ) {
-        const _numConfusedStudents = this.state.numConfusedStudents.slice();
-        _numConfusedStudents.push(student);
-        this.setState({ numConfusedStudents: _numConfusedStudents });
-      }
+      const confusion = snapshot.val();
+      const confusions = this.state.confusions.slice();
+      confusions.push({
+        student: confusion.student,
+        timestamp: new Date(confusion.timestamp * 1000),
+        slideNumber: confusion.slide_number
+      });
+      this.setState({ confusions });
     });
   }
 
+  currentConfusedStudents(): number {
+    if (this.props.currentSlide) {
+      return this.state.confusions.reduce((sum: number, confusion: Confusion) => {
+        return sum += confusion.slideNumber === this.props.currentSlide ? 1 : 0;
+      }, 0);
+    } else {
+      return this.state.confusions.length;
+    }
+  }
+
   render() {
+    const numConfused = this.currentConfusedStudents();
     return (
       <div style={containerStyles}>
         <div style={imgContainerStyles}>
-          <img src={profAvatar} />
+          <img src={avatar} />
         </div>
         <div style={firstLineStyles}>
-          {this.state.numConfusedStudents.length} student{this.state.numConfusedStudents.length === 1 ? '' : 's'}
+          {numConfused} student{numConfused === 1 ? '' : 's'}
         </div>
-        <div style={secondLineStyles}> {this.state.numConfusedStudents.length === 1 ? 'is' : 'are'} confused</div>
-        <PigmentBar numConfusedStudents={this.state.numConfusedStudents.length} numTotalStudents={this.state.numTotalStudents} />
+        <div style={secondLineStyles}> {numConfused === 1 ? 'is' : 'are'} confused</div>
+        <PigmentBar numConfusedStudents={numConfused} numTotalStudents={this.state.numTotalStudents} />
       </div>
     );
   }
