@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import ChartBar from './ChartBar';
-import SummaryCardHeader from './SummaryCardHeader';
 import * as GoogleApi from '../shared/GoogleApiInterface';
 
 import { Slide } from '../../models';
@@ -9,12 +8,24 @@ import { confusionSlides } from '../../mockdata/confusion-slides';
 
 const containerStyles = {
   width: '100%',
-  height: '100%',
-  border: 'solid 1px black',
-  backgroundColor: 'var(--white)'
+  border: 'solid 1px #e4e4e4',
+  borderRadius: '4px',
+  flexGrow: 1
+};
+const headerStyles = {
+  width: '100%',
+  height: '60px',
+  borderBottom: 'solid 1px #e4e4e4',
+  paddingLeft: '35px',
+  boxSizing: 'border-box',
+  display: 'flex',
+  alignItems: 'center' as 'center',
+  fontSize: '18px',
+  letterSpacing: '2.3px',
+  color: 'black'
 };
 const chartContainerStyles = {
-  height: '90.4%',
+  height: '445px',
   padding: '3.7% 3.7% 2.5% 3.7%',
   boxSizing: 'border-box',
   display: 'flex',
@@ -100,9 +111,7 @@ class ConfusionChart extends React.Component<Props, State> {
   render() {
     return (
       <div style={containerStyles}>
-        <div style={{height: '9.6%'}}>
-          <SummaryCardHeader title='Slides students found most confusing' />
-        </div>
+        <div style={headerStyles}>Slides students found most confusing</div>
 
         <div style={chartContainerStyles}>
           <div style={canvasStyles}>
@@ -132,7 +141,9 @@ class ConfusionChart extends React.Component<Props, State> {
             <div style={barsContainerStyles}>
               {
                 confusionSlides.map((slide: Slide, i: number) => {
-                  return <ChartBar key={i} numStudents={slide.studentsConfused} height={(slide.studentsConfused / this.state.topBarNum) * 100 + '%'} />;
+                  return <ChartBar key={i}
+                                   numStudents={slide.studentsConfused}
+                                   height={(slide.studentsConfused / this.state.topBarNum) * 100 + '%'} />;
                 })
               }
             </div>

@@ -2,12 +2,24 @@ import * as React from 'react';
 
 const containerStyles = {
   width: '8.9%',
-  backgroundColor: 'var(--pale-lilac)',
-  position: 'relative' as 'relative'
+  opacity: 0.21,
+  position: 'relative' as 'relative',
+  display: 'flex',
+  flexDirection: 'column' as 'column'
 };
 const activeContainerStyles = {
   ...containerStyles,
-  backgroundColor: 'var(--lavender-blue)'
+  opacity: 0.68
+};
+const topBarStyles = {
+  height: '3px',
+  marginBottom: '2px',
+  borderRadius: '1.5px',
+  backgroundColor: '#4f92ff'
+};
+const barStyles = {
+  flexGrow: 1,
+  background: 'linear-gradient(to bottom, #317bf2, #cadeff)',
 };
 const tooltipStyles = {
   position: 'absolute' as 'absolute',
@@ -15,8 +27,8 @@ const tooltipStyles = {
   left: '25%',
   width: '50%',
   height: '35px',
-  backgroundColor: 'var(--lavender-blue)',
-  boxShadow: '-2px 0 11px 0 var(--pale-lilac)',
+  backgroundColor: '#4f92ff',
+  boxShadow: '-2px 0 11px 0 rgba(79, 146, 255, 0.36)',
   borderRadius: '4px',
   display: 'flex',
   alignItems: 'center' as 'center',
@@ -64,14 +76,17 @@ export class ChartBar extends React.Component<Props, State> {
            onMouseEnter={this.toggleTooltip}
            onMouseLeave={this.toggleTooltip}
       >
-        {
-          this.state.showTooltip ?
-          <div style={tooltipStyles}>
-            {this.props.numStudents}
-            <div style={tooltipArrowStyles} />
-          </div> :
-          ''
-        }
+        <div style={topBarStyles}></div>
+        <div style={barStyles}>
+          {
+            this.state.showTooltip ?
+            <div style={tooltipStyles}>
+              {this.props.numStudents}
+              <div style={tooltipArrowStyles} />
+            </div> :
+            ''
+          }
+        </div>
       </div>
     );
   }

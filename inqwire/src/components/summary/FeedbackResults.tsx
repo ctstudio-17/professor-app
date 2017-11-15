@@ -1,39 +1,41 @@
 import * as React from 'react';
 
-import SummaryCardHeader from './SummaryCardHeader';
+const nerdIcon = require('../../assets/nerd.svg');
 
 const containerStyles = {
   width: '100%',
   height: '100%',
   boxSizing: 'border-box',
-  border: 'solid 1px black',
-  backgroundColor: 'var(--white)',
   display: 'flex',
-  flexDirection: 'column' as 'column',
   justifyContent: 'space-between' as 'space-between'
 };
-const feedbackListStyles = {
-  height: '74.8%',
-  overflowX: 'hidden' as 'hidden',
-  overflowY: 'auto' as 'auto'
+const boxStyles = {
+  border: 'solid 1px #e4e4e4',
+  borderRadius: '4px'
 };
-const feedbackRowStyles = {
-  padding: '6.3%',
-  boxSizing: 'border-box',
+const boxOneStyles = {
+  ...boxStyles,
+  width: '25.5%',
+  display: 'flex',
+  flexDirection: 'column' as 'column',
+  alignItems: 'center' as 'center'
+};
+const nerdContainerStyles = {
+  height: '140px',
+  width: '140px',
+  margin: '118px 0 40px 0',
   display: 'flex',
   alignItems: 'center' as 'center',
-  borderBottom: 'solid 1px rgba(151, 151, 151, 0.24)',
-  fontSize: '18px',
-  fontWeight: 'lighter' as 'lighter',
-  lineHeight: 1.39
+  justifyContent: 'center' as 'center',
+  backgroundColor: '#fff0bb',
+  border: 'solid 1px #ffe279',
+  borderRadius: '50%'
 };
-const viewAllButtonStyles = {
-  ...feedbackRowStyles,
-  height: '14%',
-  fontSize: '16px',
+const titleTextStyles = {
+  marginBottom: '10px',
+  fontSize: '30px',
   fontWeight: 'bold' as 'bold',
-  alignSelf: 'center' as 'center',
-  cursor: 'pointer'
+  letterSpacing: '1px'
 };
 
 interface Props {
@@ -44,19 +46,19 @@ class FeedbackResults extends React.Component<Props, {}> {
   render() {
     return (
     <div style={containerStyles}>
-      <div style={{height: '11.2%'}}>
-        <SummaryCardHeader title='Student Feedback' />
+      <div style={boxOneStyles}>
+        <div style={nerdContainerStyles}>
+          <img src={nerdIcon} style={{height: '50%', width: '50%'}} />
+        </div>
+        <div style={{textAlign: 'center', margin: '0 9.7%'}}>
+          <div style={titleTextStyles}>65 students</div>
+          <div style={{fontSize: '20px', lineHeight: 1.3}}>left feedback about your lecture</div>
+        </div>
       </div>
 
-      <div style={feedbackListStyles}>
-        {
-          this.props.feedback.map((feedback: string, i: number) => {
-            return feedback ? <div key={i} style={feedbackRowStyles}>{feedback}</div> : '';
-          })
-        }
-      </div>
+      <div style={{...boxStyles, width: '71.2%'}}>
 
-      <div style={viewAllButtonStyles}>VIEW ALL</div>
+      </div>
     </div>
     );
   }

@@ -5,8 +5,7 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Classes from './components/Classes';
 import Lectures from './components/Lectures';
-// import Summary from './components/Summary';
-import Summary from './components/SummaryNew';
+import Summary from './components/Summary';
 
 import { Lecture, Presentation } from './models';
 
@@ -20,12 +19,13 @@ const headerStyles = {
 };
 const containerStyles = {
   padding: '1.5%',
+  height: '89.7%',
   boxSizing: 'border-box',
-  height: '89.7%'
+  position: 'relative' as 'relative'
 };
 
 interface State {
-  currPage: 'login' | 'classes' | 'lectures' | 'dashboard' | 'summary' | 'history';
+  currPage: 'login' | 'classes' | 'lectures' | 'dashboard' | 'summary';
   lectureStartTime?: Date;
   selectedPresentation?: Presentation;
 }
@@ -48,11 +48,7 @@ class App extends React.Component<{}, State> {
     };
   }
 
-  componentDidMount() {
-    // this.startLecture();
-  }
-
-  setPage(page: 'login' | 'classes' | 'lectures' | 'dashboard' | 'summary' | 'history') {
+  setPage(page: 'login' | 'classes' | 'lectures' | 'dashboard' | 'summary') {
     if (page === 'classes') {
       api.setClass(undefined);
       api.setLecture(undefined);
