@@ -42,7 +42,7 @@ export function getPresentations(pageToken?: string) {
 export function getPresentation(presentationId: string) {
   return gapi.client.slides.presentations.get({
     presentationId,
-    fields: 'slides/objectId'
+    fields: 'slides(objectId,slideProperties/notesPage/pageElements/shape/text/textElements/textRun/content)'
   });
 }
 

@@ -136,7 +136,7 @@ class PresentationViewer extends React.Component<Props, State> {
   }
 
   setPage(page: number) {
-    if (page < 0 || page > this.state.totalSlides) { return; }
+    if (page < 0 || page >= this.state.totalSlides) { return; }
     if (this.state.slides[page].thumbnailUrl) {
       this.updatePage(page, this.state.slides[page].thumbnailUrl);
     } else {
