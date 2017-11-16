@@ -13,7 +13,8 @@ const titleStyles = {
 };
 const iconStyles = {
   width: '25px',
-  height: '25px'
+  height: '25px',
+  verticalAlign: 'text-top'
 };
 
 interface Props {

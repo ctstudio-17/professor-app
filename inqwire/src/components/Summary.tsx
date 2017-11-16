@@ -3,10 +3,10 @@ import api from '../firebase';
 
 import GreetingBar from './summary/GreetingBar';
 import SummarySection from './summary/SummarySection';
-import RatingResults from './summary/RatingResults';
+import ClosingQuestionsContainer from './summary/closing-questions/ClosingQuestionsContainer';
 import FeedbackResults from './summary/FeedbackResults';
 import ConfusionChart from './summary/ConfusionChart';
-import PollResultsSummary from './summary/PollResultsSummary';
+import PollResultsContainer from './summary/polls/PollResultsContainer';
 
 import { Presentation } from '../models';
 import { confusionSlides } from '../mockdata/confusion-slides';
@@ -98,7 +98,7 @@ class Summary extends React.Component<Props, State> {
           <SummarySection title='Closing Questions'
                           icon={icons.ballot}
                           width='26.6%'>
-            <RatingResults ratings={this.state.ratings} />
+            <ClosingQuestionsContainer ratings={this.state.ratings} />
           </SummarySection>
         </div>
 
@@ -114,7 +114,7 @@ class Summary extends React.Component<Props, State> {
           <SummarySection title='Polls & Quizzes'
                           icon={icons.notebook}
                           width='100%'>
-            <PollResultsSummary polls={pollResults} />
+            <PollResultsContainer polls={pollResults} />
           </SummarySection>
         </div>
       </div>
