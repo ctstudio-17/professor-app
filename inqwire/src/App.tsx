@@ -27,7 +27,7 @@ const containerStyles = {
   position: 'relative' as 'relative'
 };
 const dashboardContainerStyles = {
-  height: '91.8%'
+  height: '100%'
 };
 
 interface State {
@@ -130,9 +130,13 @@ class App extends React.Component<{}, State> {
 
     return (
       <div style={appStyles}>
-        <div style={headerStyles}>
-          <Header currPage={this.state.currPage} setPage={this.setPage} />
-        </div>
+        {
+          this.state.currPage === 'dashboard' ?
+          '' :
+          <div style={headerStyles}>
+            <Header currPage={this.state.currPage} setPage={this.setPage} />
+          </div>
+        }
         <div style={this.state.currPage === 'dashboard' ? dashboardContainerStyles : containerStyles}>
           { page }
         </div>

@@ -70,6 +70,7 @@ class Dashboard extends React.Component<Props, State> {
     this.handleAuthClick = this.handleAuthClick.bind(this);
     this.startPoll = this.startPoll.bind(this);
     this.openPollModal = this.openPollModal.bind(this);
+    this.closePollModal = this.closePollModal.bind(this);
     this.setSlides = this.setSlides.bind(this);
     this.updateSlideThumbnail = this.updateSlideThumbnail.bind(this);
     this.updateSlide = this.updateSlide.bind(this);
@@ -117,8 +118,13 @@ class Dashboard extends React.Component<Props, State> {
     this.setState({ currentSlide: page });
   }
 
-  openPollModal() {
+  openPollModal(e: MouseEvent) {
+    e.stopPropagation();
     this.setState({ pollModalOpen: true });
+  }
+
+  closePollModal() {
+    this.setState({ pollModalOpen: false });
   }
 
   startPoll(poll: Poll) {
@@ -137,49 +143,52 @@ class Dashboard extends React.Component<Props, State> {
 
   render() {
     return (
-      <div style={dashboardStyles}>
+      <div style={{height: '100%'}}>
         {
           this.state.pollModalOpen ?
             <CreatePoll startPoll={this.startPoll} /> :
             ''
         }
-        <div style={col1Styles}>
-          <div style={currentSlideSectionStyles}>
-            <PresentationViewerContainer selectedPresentation={this.props.selectedPresentation}
-                                         currentSlide={this.state.currentSlide}
-                                         gUserAuthorized={this.state.userAuthorized}
-                                         startTime={this.props.startTime}
-                                         slides={this.state.slides}
-                                         selectPresentation={this.props.selectPresentation}
-                                         closePresentation={this.props.closePresentation}
-                                         setSlides={this.setSlides}
-                                         updateSlideThumbnail={this.updateSlideThumbnail}
-                                         updateSlide={this.updateSlide}
-                                         handleAuthClick={this.handleAuthClick}
-                                         endLecture={this.props.endLecture} />
-          </div>
-          <div style={{...sectionStyles, height: '40.3%'}} />
-        </div>
+        <div style={{...dashboardStyles, opacity: this.state.pollModalOpen ? 0.75 : 1}} onClick={this.closePollModal} >
+          <div style={col1Styles}>
+            <div style={currentSlideSectionStyles}>
+              <PresentationViewerContainer selectedPresentation={this.props.selectedPresentation}
+                                          currentSlide={this.state.currentSlide}
+                                          gUserAuthorized={this.state.userAuthorized}
+                                          startTime={this.props.startTime}
+                                          slides={this.state.slides}
+                                          selectPresentation={this.props.selectPresentation}
+                                          closePresentation={this.props.closePresentation}
+                                          setSlides={this.setSlides}
+                                          updateSlideThumbnail={this.updateSlideThumbnail}
+                                          updateSlide={this.updateSlide}
+                                          handleAuthClick={this.handleAuthClick}
+                                          endLecture={this.props.endLecture} />
+            </div>
 
-        <div style={col2Styles}>
-          <div style={{...sectionStyles, height: '27.2%'}}>
-          {
-            this.props.selectedPresentation ?
-              <NextSlide slideSrc={this.state.slides && this.state.currentSlide >= 0 && this.state.currentSlide < this.state.slides.length - 1 ? this.state.slides[this.state.currentSlide + 1].thumbnailUrl : 'last'} /> :
-              ''
-          }
+            <div style={{...sectionStyles, height: '40.3%'}} />
           </div>
 
-          <div style={{...sectionStyles, height: '17.9%'}}>
-            <ConfusedStudents currentSlide={this.state.currentSlide} />
-          </div>
+          <div style={col2Styles}>
+            <div style={{...sectionStyles, height: '27.2%'}}>
+            {
+              this.props.selectedPresentation ?
+                <NextSlide slideSrc={this.state.slides && this.state.currentSlide >= 0 && this.state.currentSlide < this.state.slides.length - 1 ? this.state.slides[this.state.currentSlide + 1].thumbnailUrl : 'last'} /> :
+                ''
+            }
+            </div>
 
-          <div style={{...sectionStyles, height: '17.9%'}}>
-            <PollsCard openPoll={this.openPollModal} />
-          </div>
+            <div style={{...sectionStyles, height: '17.9%'}}>
+              <ConfusedStudents currentSlide={this.state.currentSlide} />
+            </div>
 
-          <div style={{...sectionStyles, height: '11.1%'}}>
-            <CheckUnderstanding startPoll={this.startPoll} />
+            <div style={{...sectionStyles, height: '17.9%'}}>
+              <PollsCard openPoll={this.openPollModal} />
+            </div>
+
+            <div style={{...sectionStyles, height: '11.1%'}}>
+              <CheckUnderstanding startPoll={this.startPoll} />
+            </div>
           </div>
         </div>
       </div>

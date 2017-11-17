@@ -15,6 +15,12 @@ const labelStyles = {
   letterSpacing: '0.9px',
   color: 'white'
 };
+const textStyles = {
+  color: 'white',
+  margin: 'auto',
+  fontSize: '42px',
+  fontWeight: 'bold' as 'bold'
+};
 
 interface Props {
   slideSrc: string;
@@ -26,7 +32,11 @@ class NextSlide extends React.Component<Props, {}> {
       <div style={containerStyles}>
         <div style={labelStyles}>Next Slide</div>
 
-        <SlidePreview slideSrc={this.props.slideSrc} height='90.3%' />
+        {
+          this.props.slideSrc === 'last' ?
+            <div style={textStyles}>Last Slide</div> :
+            <SlidePreview slideSrc={this.props.slideSrc} height='90.3%' />
+        }
       </div>
     );
   }
