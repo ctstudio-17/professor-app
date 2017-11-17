@@ -88,7 +88,7 @@ class PollResult extends React.Component<Props, {}> {
             <div style={inModal ? inModalBody : bodyStyles}>
               {
                 this.props.poll.answers.map((answer: PollAnswer, i: number) =>
-                  <PollResultAnswer withMargin={!inModal} answer={answer} barWidth={barWidths[i]} />
+                  <PollResultAnswer key={i} withMargin={!inModal} answer={answer} barWidth={barWidths[i]} />
                 )
               }
             </div> :

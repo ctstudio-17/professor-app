@@ -59,7 +59,7 @@ class FeedbackResults extends React.Component<Props, {}> {
       <div style={{...boxStyles, width: '71.2%'}}>
         <ul>
           {
-            this.props.feedback.map((s: string, i: number) => s ? <li>{s}</li> : '')
+            this.props.feedback.map((s: string, i: number) => s ? <li key={i}>{s}</li> : '')
           }
         </ul>
       </div>
