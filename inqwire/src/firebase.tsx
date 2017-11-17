@@ -46,6 +46,8 @@ class FirebaseApi {
 
   getPresentation = () =>
     this.fire.database().ref(`${this.lecturePath()}/presentation`).once('value')
+  getPresentationSlides = () =>
+    this.fire.database().ref(`${this.lecturePath()}/presentation/slides`).once('value')
 
   setPresentation = (presentation: Presentation) =>
     this.fire.database().ref(`${this.lecturePath()}`).update({ presentation })
@@ -65,7 +67,7 @@ class FirebaseApi {
     this.fire.database().ref(`${this.lecturePath()}/polls`).push(poll)
 
   getConfusionRef = () =>
-    this.fire.database().ref(`${this.lecturePath()}/confusions`)
+    this.fire.database().ref(`${this.lecturePath()}/confusions`)   
   getFeedbackRef = () =>
     this.fire.database().ref(`${this.lecturePath()}/feedback`)
   getPollResponseRef = (key: string) =>
