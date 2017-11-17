@@ -2,13 +2,13 @@ import * as React from 'react';
 
 const containerStyles = {
   borderBottom: 'solid 1px #e4e4e4',
-  padding: '38px 0 38px 18.2%',
+  padding: '38px 0px',
   flexGrow: 1,
   display: 'flex'
 };
 const iconStyles = {
-  height: '100%',
-  marginRight: '7.5%'
+  height: '34px',
+  margin: '4% 7.5%',
 };
 const textStyles = {
   display: 'flex',

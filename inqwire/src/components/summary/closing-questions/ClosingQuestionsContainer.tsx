@@ -16,9 +16,9 @@ const icons = [
 ];
 
 const texts = [
-  'Students were not engaged in this lecture.',
+  'Students were not <b>engaged</b> in this lecture.',
   'Students were moderately engaged in this lecture.',
-  'Students were engaged in this lecture.',
+  'Students were <b>engaged</b> in this lecture.',
   'Students did not understand in this lecture.',
   'Students had an OK understaning.',
   'Students had a good understanding in this lecture.',
