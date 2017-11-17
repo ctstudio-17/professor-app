@@ -15,13 +15,19 @@ const appStyles = {
   flexDirection: 'column' as 'column'
 };
 const headerStyles = {
-  height: '8.2%'
+  height: '8.2%',
+  position: 'sticky' as 'sticky',
+  top: 0,
+  zIndex: 1
 };
 const containerStyles = {
   padding: '1.5%',
   height: '89.7%',
   boxSizing: 'border-box',
   position: 'relative' as 'relative'
+};
+const dashboardContainerStyles = {
+  height: '91.8%'
 };
 
 interface State {
@@ -127,7 +133,7 @@ class App extends React.Component<{}, State> {
         <div style={headerStyles}>
           <Header currPage={this.state.currPage} setPage={this.setPage} />
         </div>
-        <div style={containerStyles}>
+        <div style={this.state.currPage === 'dashboard' ? dashboardContainerStyles : containerStyles}>
           { page }
         </div>
       </div>

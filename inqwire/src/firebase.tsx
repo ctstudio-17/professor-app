@@ -51,7 +51,7 @@ class FirebaseApi {
     this.fire.database().ref(`${this.lecturePath()}`).update({ presentation })
   closePresentation = () =>
     this.fire.database().ref(`${this.lecturePath()}/presentation`).remove()
-  setSlides = (id: string, slides: Slide[]) =>
+  setSlides = (slides: Slide[]) =>
     this.fire.database().ref(`${this.lecturePath()}/presentation`).update({ slides })
   setCurrentSlide = (page: number) =>
     this.fire.database().ref(`${this.lecturePath()}/presentation`).update({ currentPage: page })

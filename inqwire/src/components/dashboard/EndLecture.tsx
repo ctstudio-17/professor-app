@@ -43,73 +43,12 @@ const subHeaderStyles = {
   fontSize: '14px',
   letterSpacing: '1.8px'
 };
-const timeContainerStyles = {
-  position: 'absolute' as 'absolute',
-  width: '5.8%',
-  height: '24.7%',
-  top: '9.9%',
-  right: '0.9%',
-  display: 'flex',
-  flexDirection: 'column' as 'column',
-  color: '#5f5f5f'
-};
-const timeStyles = {
-  fontSize: '14px',
-  fontWeight: 'bold' as 'bold',
-  letterSpacing: '1.8px'
-};
-const timeLabelStyles = {
-  fontSize: '7px',
-  letterSpacing: '1px',
-  display: 'flex',
-  justifyContent: 'space-between' as 'space-between'
-};
-
-const convertDateToSeconds = (date: Date) => parseInt(String(date.getTime() / 1000), 10);
 
 interface Props {
-  startTime?: Date;
   endLecture: any;
 }
-interface State {
-  intervalId: number;
-  minutes: number;
-  seconds: number;
-}
 
-class EndLecture extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    if (props.startTime) {
-      const passedTime = convertDateToSeconds(new Date()) - convertDateToSeconds(props.startTime);
-      this.state = {
-        intervalId: -1,
-        minutes: parseInt(String(passedTime / 60), 10),
-        seconds: passedTime % 60
-      };
-    } else {
-      this.state = {
-        intervalId: -1,
-        minutes: 0,
-        seconds: 0
-      };
-    }
-  }
-
-  updateTime() {
-    const minutes = this.state.minutes + Math.floor((this.state.seconds + 1) / 60);
-    this.setState({
-      minutes: minutes,
-      seconds: (this.state.seconds + 1) % 60
-    });
-  }
-
-  componentDidMount() {
-    const intervalId = setInterval(this.updateTime.bind(this), 1000);
-    this.setState({ intervalId });
-  }
-
+class EndLecture extends React.Component<Props, {}> {
   render() {
     return (
       <div style={containerStyles} onClick={this.props.endLecture}>
@@ -120,21 +59,8 @@ class EndLecture extends React.Component<Props, State> {
           <div>Lecture In Progress</div>
         </div>
         <div style={subHeaderStyles}>CLICK TO END LECTURE</div>
-
-        <div style={timeContainerStyles}>
-          <div style={timeStyles}>
-            <span>{this.state.minutes < 10 ? '0' + this.state.minutes : this.state.minutes}</span>
-            <span>:</span>
-            <span>{('0' + this.state.seconds).slice(-2)}</span>
-          </div>
-          <div style={timeLabelStyles}><span>min</span><span>sec</span></div>
-        </div>
       </div>
     );
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.state.intervalId);
   }
 }
 
