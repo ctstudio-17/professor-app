@@ -83,7 +83,7 @@ interface Props {
 
 class ConfusedStudents extends React.Component<Props, {}> {
   currentConfusedStudents(): number {
-    if (this.props.currentSlide) {
+    if (this.props.currentSlide !== undefined) {
       return this.props.confusions.reduce((sum: number, confusion: Confusion) => {
         return sum += confusion.slideNumber === this.props.currentSlide ? 1 : 0;
       }, 0);
