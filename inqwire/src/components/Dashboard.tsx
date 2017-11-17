@@ -6,8 +6,8 @@ import PresentationViewerContainer from './dashboard/presentation/PresentationVi
 import NextSlide from './dashboard/presentation/NextSlide';
 import ConfusedStudents from './dashboard/ConfusedStudents';
 import PollsCard from './dashboard/polls/PollsCard';
-// import CreatePoll from './dashboard/CreatePoll';
-// import EndLecture from './dashboard/EndLecture';
+import CreatePoll from './dashboard/polls/CreatePoll';
+import EndLecture from './dashboard/EndLecture';
 // import PollResults from './dashboard/PollResults';
 
 import { Poll, Presentation, Slide } from '../models';
@@ -54,6 +54,7 @@ interface Props {
   selectedPresentation?: Presentation;
 }
 interface State {
+  pollModalOpen: boolean;
   pollRunning: boolean;
   userAuthorized: boolean;
   currentSlide: number;
@@ -67,14 +68,16 @@ class Dashboard extends React.Component<Props, State> {
     this.updateGoogleAuthStatus = this.updateGoogleAuthStatus.bind(this);
     this.handleAuthClick = this.handleAuthClick.bind(this);
     this.startPoll = this.startPoll.bind(this);
+    this.openPollModal = this.openPollModal.bind(this);
     this.setSlides = this.setSlides.bind(this);
     this.updateSlideThumbnail = this.updateSlideThumbnail.bind(this);
     this.updateSlide = this.updateSlide.bind(this);
 
     this.state = {
+      pollModalOpen: false,
+      pollRunning: false,
       currentSlide: -1,
       slides: props.selectedPresentation ? props.selectedPresentation.slides : [],
-      pollRunning: false,
       userAuthorized: false
     };
   }
@@ -113,6 +116,10 @@ class Dashboard extends React.Component<Props, State> {
     this.setState({ currentSlide: page });
   }
 
+  openPollModal() {
+    this.setState({ pollModalOpen: true });
+  }
+
   startPoll(poll: Poll) {
     const pollKey = api.createPoll({
       ...poll,
@@ -129,6 +136,11 @@ class Dashboard extends React.Component<Props, State> {
   render() {
     return (
       <div style={dashboardStyles}>
+        {
+          this.state.pollModalOpen ?
+            <CreatePoll startPoll={this.startPoll} /> :
+            ''
+        }
         <div style={col1Styles}>
           <div style={currentSlideSectionStyles}>
             <PresentationViewerContainer selectedPresentation={this.props.selectedPresentation}
@@ -160,7 +172,11 @@ class Dashboard extends React.Component<Props, State> {
           </div>
 
           <div style={{...sectionStyles, height: '17.9%'}}>
-            <PollsCard openPoll={''} />
+            <PollsCard openPoll={this.openPollModal} />
+          </div>
+
+          <div style={{...sectionStyles, height: '11.1%'}}>
+            <EndLecture endLecture={this.props.endLecture} />
           </div>
         </div>
 

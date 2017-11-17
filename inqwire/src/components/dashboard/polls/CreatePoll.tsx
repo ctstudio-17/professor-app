@@ -1,9 +1,9 @@
 import * as React from 'react';
 
-import Button from '../shared/Button';
+import Button from '../../shared/Button';
 import PollAnswer from './PollAnswer';
 
-const clockIcon = require('../../assets/clock-icon.svg');
+const clockIcon = require('../../../assets/clock-icon.svg');
 const understandingPoll = {
   pollTime: 1,
   questionText: 'Do you understand?',

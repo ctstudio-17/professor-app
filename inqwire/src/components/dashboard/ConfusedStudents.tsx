@@ -10,6 +10,7 @@ const containerStyles = {
   height: '100%',
   background: 'linear-gradient(to bottom, #fbb249, #fb973d)',
   border: 'solid 1px #585858',
+  borderRadius: '3px',
   display: 'flex',
   justifyContent: 'center' as 'center',
   alignItems: 'center' as 'center'

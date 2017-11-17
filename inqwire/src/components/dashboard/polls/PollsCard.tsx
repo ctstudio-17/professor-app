@@ -5,6 +5,7 @@ const containerStyles = {
   width: '100%',
   height: '100%',
   border: 'solid 1px #585858',
+  borderRadius: '3px',
   backgroundColor: '#2c2c2c',
   color: 'white',
   letterSpacing: '1.1px',
