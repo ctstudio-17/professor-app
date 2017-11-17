@@ -11,9 +11,10 @@ import CheckUnderstanding from './dashboard/polls/CheckUnderstanding';
 import PollModal from './dashboard/polls/PollModal';
 import CreatePoll from './dashboard/polls/CreatePoll';
 import PollResult from './summary/polls/PollResult';
-// import PollResults from './dashboard/polls/PollResults';
 
 import { Confusion, Poll, PollResults, Presentation, Slide } from '../models';
+
+const ReactCountdownClock = require('react-countdown-clock');
 
 const dashboardStyles = {
   height: '100%',
@@ -70,6 +71,7 @@ interface State {
   currentPollResults?: PollResults;
   pollModalOpen: boolean;
   pollRunning: boolean;
+  pollEndSeconds?: number;
   userAuthorized: boolean;
   currentSlide: number;
   slides: Slide[];
@@ -185,7 +187,8 @@ class Dashboard extends React.Component<Props, State> {
         })
       },
       pollModalOpen: true,
-      pollRunning: true
+      pollRunning: true,
+      pollEndSeconds: parseInt(String(new Date().getTime() / 1000), 10) + (poll.pollTime * 60)
     });
 
     setTimeout(() => this.closePoll(pollKey), poll.pollTime * 60 * 1000);
@@ -208,11 +211,22 @@ class Dashboard extends React.Component<Props, State> {
           this.state.pollModalOpen ?
             <PollModal>
               {
-                this.state.pollRunning && this.state.currentPollResults ?
-                  <PollResult poll={this.state.currentPollResults}
-                              isExpanded={true}
-                              togglePoll={() => {}}
-                              inModal={true} /> :
+                this.state.pollRunning && this.state.currentPollResults && this.state.pollEndSeconds ?
+                  <div style={{position: 'relative', height: '100%', width: '100%'}}>
+                    <PollResult poll={this.state.currentPollResults}
+                                isExpanded={true}
+                                togglePoll={() => {}}
+                                inModal={true} />
+                    <div style={{position: 'absolute', right: 0, bottom: 0, height: '100px', width: '100px'}}>
+                      <ReactCountdownClock seconds={this.state.pollEndSeconds - parseInt(String(new Date().getTime() / 1000), 10)}
+                                          color='rgb(79, 146, 255'
+                                          alpha={0.9}
+                                          size={100}
+                                          fontSize='18px'
+                                          font='Rubik, sans-serif'
+                                          showMilliseconds={false} />
+                    </div>
+                  </div> :
                   <CreatePoll startPoll={this.startPoll} />
               }
             </PollModal> :
