@@ -19,12 +19,12 @@ const texts = [
   <span>Students were <b>not engaged</b> in this lecture.</span>,
   <span>Students were <b>moderately engaged</b> in this lecture.</span>,
   <span>Students were <b>engaged</b> in this lecture.</span>,
-  <span>Students did <b>not understand</b> in this lecture.</span>,
-  <span>Students had an <b>OK understaning</b>.</span>,
-  <span>Students had a <b>good understanding</b> in this lecture.</span>,
-  <span>Students found this lecture to be <b>too fast</b>.</span>,
+  <span>Students had a <b>bad understanding</b> of this lecture.</span>,
+  <span>Students had an <b>OK understaning</b> of this lecture.</span>,
+  <span>Students had a <b>good understanding</b> of this lecture.</span>,
+  <span>Students found this lecture to be <b>too slow</b>.</span>,
   <span>Students found this lecture to have a <b>good pace</b>.</span>,
-  <span>Students found this lecture to be <b>too slow</b>.</span>
+  <span>Students found this lecture to be <b>too fast</b>.</span>
 ];
 
 const containerStyles = {
