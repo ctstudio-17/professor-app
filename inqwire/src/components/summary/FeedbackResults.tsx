@@ -51,13 +51,20 @@ class FeedbackResults extends React.Component<Props, {}> {
           <img src={nerdIcon} style={{height: '50%', width: '50%'}} />
         </div>
         <div style={{textAlign: 'center', margin: '0 9.7%'}}>
-          <div style={titleTextStyles}>65 students</div>
+          <div style={titleTextStyles}>{this.props.feedback.length} students</div>
           <div style={{fontSize: '20px', lineHeight: 1.3}}>left feedback about your lecture</div>
         </div>
       </div>
 
       <div style={{...boxStyles, width: '71.2%'}}>
-
+        <ul>
+          {
+            this.props.feedback.map((s: string, i: number) => {
+              if(s!=''){return <li>{s}</li>;}
+              return ''
+            })
+          }
+        </ul>
       </div>
     </div>
     );

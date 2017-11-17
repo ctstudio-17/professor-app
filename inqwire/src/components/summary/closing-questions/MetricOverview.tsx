@@ -19,14 +19,14 @@ const labelStyles = {
   fontSize: '16px'
 };
 const numStudentsStyles = {
-  fontSize: '24px',
+  fontSize: '16',
   fontWeight: 'lighter' as 'lighter'
 };
 
 interface Props {
-  icon: any;
+  icon: string;
   title: string;
-  numStudents: number;
+  text: string;
   isLast: boolean;
 }
 
@@ -37,7 +37,7 @@ class MetricOverview extends React.Component<Props, {}> {
         <img src={this.props.icon} style={iconStyles} />
         <div style={textStyles}>
           <div style={labelStyles}>{this.props.title}</div>
-          <div style={numStudentsStyles}>{this.props.numStudents} students</div>
+          <div style={numStudentsStyles}>{this.props.text}</div>
         </div>
       </div>
     );

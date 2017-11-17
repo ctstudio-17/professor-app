@@ -3,11 +3,29 @@ import * as React from 'react';
 import ClosingQuestionsOverview from './ClosingQuestionsOverview';
 import MetricOverview from './MetricOverview';
 
-const icons = {
-  bad: require('../../../assets/angry-face.svg'),
-  med: require('../../../assets/weird-face.svg'),
-  good: require('../../../assets/smiley-face.svg')
-};
+const icons = [
+  require('../../../assets/bad_engagement.png'),
+  require('../../../assets/med_engagement.png'),
+  require('../../../assets/good_engagement.png'),
+  require('../../../assets/bad_understanding.png'),
+  require('../../../assets/med_understanding.png'),
+  require('../../../assets/good_understanding.png'),
+  require('../../../assets/slow_pace.png'),
+  require('../../../assets/good_pace.png'),
+  require('../../../assets/fast_pace.png'),
+];
+
+const texts = [
+  'Students were not engaged in this lecture.',
+  'Students were moderately engaged in this lecture.',
+  'Students were engaged in this lecture.',
+  'Students did not understand in this lecture.',
+  'Students had an OK understaning.',
+  'Students had a good understanding in this lecture.',
+  'Students found this lecture to be too fast.',
+  'Students found this lecture to have a good pace.',
+  'Students found this lecture to be too slow',
+]
 
 const containerStyles = {
   display: 'flex',
@@ -24,8 +42,7 @@ const ratingsOverviewContainerStyles = {
 };
 
 interface Props {
-  ratings: number[];
-  // ratingBreakdowns: number[];
+  levels: number[];
 }
 
 class ClosingQuestionsContainer extends React.Component<Props, {}> {
@@ -36,11 +53,11 @@ class ClosingQuestionsContainer extends React.Component<Props, {}> {
 
         <div style={ratingsOverviewContainerStyles}>
           {
-            ['Lecture Engagement', 'Student Comprehension', 'Keeping Pace'].map((s: string, i: number, arr: string[]) => {
+            ['Lecture Engagement', 'Lecture Understanding', 'Lecture Pace'].map((s: string, i: number, arr: string[]) => {
               return <MetricOverview key={i}
-                                     icon={icons.bad}
+                                     icon={icons[i*3+this.props.levels[i]]}
+                                     text={texts[i*3+this.props.levels[i]]}
                                      title={s}
-                                     numStudents={3}
                                      isLast={i === arr.length - 1} />;
             })
           }

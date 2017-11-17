@@ -9,7 +9,6 @@ import ConfusionChart from './summary/ConfusionChart';
 import PollResultsContainer from './summary/polls/PollResultsContainer';
 
 import { Presentation } from '../models';
-import { confusionSlides } from '../mockdata/confusion-slides';
 import { pollResults } from '../mockdata/poll-results';
 
 const icons = {
@@ -40,8 +39,10 @@ interface Props {
   selectedPresentation?: Presentation;
 }
 interface State {
+  feedback_number: number;
   feedback: string[];
-  ratings: number[];
+  scores: number[];
+  levels: number[];
   showGreeting: boolean;
 }
 
@@ -50,8 +51,10 @@ class Summary extends React.Component<Props, State> {
     super(props);
     this.closeGreeting = this.closeGreeting.bind(this);
     this.state = {
+      feedback_number: 0,
       feedback: [],
-      ratings: [],
+      scores: [0,0,0],
+      levels: [],
       showGreeting: true
     };
 
@@ -63,12 +66,19 @@ class Summary extends React.Component<Props, State> {
   }
 
   onFeedback(snapshot: any) {
+    const feedback_number = this.state.feedback_number + 1;
+    var feedbackObj: any = snapshot.val();
     const feedback = this.state.feedback.slice();
-    feedback.push(snapshot.val().content);
-    const ratings = this.state.ratings.slice();
-    ratings.push(snapshot.val().rating);
-
-    this.setState({ feedback, ratings });
+    feedback.push(feedbackObj.comments);
+    const scores = this.state.scores.slice();
+    const levels = this.state.levels.slice();
+    scores[0] = (scores[0]*(feedback_number-1) + feedbackObj.engagement)/feedback_number;
+    scores[1] = (scores[1]*(feedback_number-1) + feedbackObj.understanding)/feedback_number;
+    scores[2] = (scores[2]*(feedback_number-1) + feedbackObj.pace)/feedback_number;
+    levels[0] = scores[0]>=3.5 ? 2 : (scores[0]>=2.5 ? 1 :0); 
+    levels[1] = scores[1]>=3.5 ? 2 : (scores[1]>=2.5 ? 1 :0); 
+    levels[2] = scores[2]>=2.33 ? 2 : (scores[2]>=1.66 ? 1 :0); 
+    this.setState({ feedback_number, feedback, scores, levels });
   }
 
   render() {
@@ -91,14 +101,14 @@ class Summary extends React.Component<Props, State> {
             <SummarySection title='Lecture Stats'
                             icon={icons.chart}
                             width='70.2%'>
-              <ConfusionChart presentationId={this.props.selectedPresentation.id} confusionSlides={confusionSlides} />
+              <ConfusionChart presentationId={this.props.selectedPresentation.id} />
             </SummarySection> :
             'No presentation was selected'
           }
           <SummarySection title='Closing Questions'
                           icon={icons.ballot}
                           width='26.6%'>
-            <ClosingQuestionsContainer ratings={this.state.ratings} />
+            <ClosingQuestionsContainer levels={this.state.levels} />
           </SummarySection>
         </div>
 

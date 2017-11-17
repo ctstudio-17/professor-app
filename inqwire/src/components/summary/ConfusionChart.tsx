@@ -1,10 +1,7 @@
 import * as React from 'react';
+import api from '../../firebase';
 
 import ChartBar from './ChartBar';
-import * as GoogleApi from '../shared/GoogleApiInterface';
-
-import { Slide } from '../../models';
-import { confusionSlides } from '../../mockdata/confusion-slides';
 
 const containerStyles = {
   width: '100%',
@@ -71,48 +68,92 @@ const thumbnailStyles = {
 
 interface Props {
   presentationId: string;
-  confusionSlides: Slide[];
 }
 interface State {
-  maxStudentsConfused: number;
+  confusedStudents: number[];
   topBarNum: number;
-  thumbnails: any[];
+  thumbnails: string[];
 }
 
 class ConfusionChart extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    const maxStudentsConfused = props.confusionSlides.reduce((prevVal: Slide, currVal: Slide) => {
-                                                                if (currVal.studentsConfused > prevVal.studentsConfused) {
-                                                                  return currVal;
-                                                                } else {
-                                                                  return prevVal;
-                                                                }
-                                                              }).studentsConfused;
+    // this.state = {
+    //   confusedStudents: [],
+    //   topBarNum: 0,
+    //   thumbnails: [],
+    // }
+  }
 
-    if (GoogleApi.getUserLoginStatus()) {
-      props.confusionSlides.map((slide: Slide, i: number) => {
-        return GoogleApi.getSlideThumbnail(props.presentationId, slide.slideId).then((res: any) => {
-            const newThumbnails = this.state.thumbnails;
-            newThumbnails[i] = res.result.contentUrl;
-            this.setState({thumbnails: newThumbnails});
-        });
+  componentDidMount() {
+    this.fetchConfusions();
+  }
+
+  fetchConfusions() {
+    var confusions: any[] = []
+    var confusedStudents: number[] = []
+    var slider_ids: number[] = []
+    var thumbnails: string[] = []
+    api.getConfusionRef().once('value').then((snapshot: any) => {
+      if (snapshot.val() == null) { throw new Error('error'); }
+      confusions = Object.keys(snapshot.val()).map((key) => {return snapshot.val()[key]})
+      slider_ids = confusions.reduce((slides: number[], confusion: any) => {
+        if(slides.indexOf(confusion.slide_number) != -1){return slides}
+        return slides.concat(confusion.slide_number);
+      }, []);
+      confusedStudents = Array(slider_ids.length).fill(0)
+      confusions.forEach((confusion) => {
+        confusedStudents[slider_ids.indexOf(confusion.slide_number)] += 1;
       });
-    }
-
-    this.state = {
-      maxStudentsConfused: maxStudentsConfused,
-      topBarNum: Math.ceil(maxStudentsConfused / 5) * 5,
-      thumbnails: Array(6).fill('')
-    };
+    }).then(() => {
+      return api.getPresentationSlides()
+    }).then((sliders: any) => {
+      thumbnails = slider_ids.map((id) => {
+        return sliders.val()[id]['thumbnailUrl']
+      });
+      return thumbnails
+    }).then(() => {
+      this.setState({
+        confusedStudents: confusedStudents,
+        topBarNum: Math.ceil(Math.max.apply(null, confusedStudents) / 5) * 5,
+        thumbnails: thumbnails,
+      });
+    }).catch( (error: any) => {
+      this.setState({
+        confusedStudents: [],
+      });
+    });
   }
 
   render() {
+    if (!this.state) {
+      return this.renderLoadingView();
+    }
+    
+    if (this.state.confusedStudents.length == 0) {
+      return this.renderNoData();
+    }
+
+    return this.renderChart();
+  }
+
+  renderLoadingView() {
+    return (
+      <div> Loading... </div>
+    );
+  }
+
+  renderNoData() {
+    return (
+      <div> No data </div>
+    );
+  }
+
+  renderChart() {
     return (
       <div style={containerStyles}>
         <div style={headerStyles}>Slides students found most confusing</div>
-
         <div style={chartContainerStyles}>
           <div style={canvasStyles}>
             {
@@ -140,10 +181,10 @@ class ConfusionChart extends React.Component<Props, State> {
             }
             <div style={barsContainerStyles}>
               {
-                confusionSlides.map((slide: Slide, i: number) => {
+                this.state.confusedStudents.map((student_number: number, i: number) => {
                   return <ChartBar key={i}
-                                   numStudents={slide.studentsConfused}
-                                   height={(slide.studentsConfused / this.state.topBarNum) * 100 + '%'} />;
+                                   numStudents={student_number}
+                                   height={(student_number / this.state.topBarNum) * 100 + '%'} />;
                 })
               }
             </div>
@@ -151,7 +192,6 @@ class ConfusionChart extends React.Component<Props, State> {
           <div style={thumbnailRowStyles}>
             {
               this.state.thumbnails.map((thumbnailSrc: any, i: number) => {
-                // return <img key={i} style={thumbnailStyles}><img src={thumbnailSrc} /></div>;
                 return <img key={i} style={thumbnailStyles} src={thumbnailSrc} />;
               })
             }
