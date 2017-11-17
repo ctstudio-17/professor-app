@@ -21,6 +21,8 @@ const inModalHeader = {
 };
 const headerStyles = {
   ...inModalHeader,
+  height: '100px',
+  justifyContent: 'space-between' as 'space-between',
   cursor: 'pointer'
 };
 const arrowStyles = {
