@@ -2,7 +2,7 @@ import * as React from 'react';
 
 const containerStyles = {
   borderBottom: 'solid 1px #e4e4e4',
-  padding: '38px 0px',
+  padding: '38px 20px 38px 0px',
   flexGrow: 1,
   display: 'flex'
 };
