@@ -3,21 +3,33 @@ import * as GoogleApi from './shared/GoogleApiInterface';
 import api from '../firebase';
 
 import PresentationViewerContainer from './dashboard/presentation/PresentationViewerContainer';
+import ConfusionComments from './dashboard/ConfusionComments';
 import NextSlide from './dashboard/presentation/NextSlide';
 import ConfusedStudents from './dashboard/ConfusedStudents';
 import PollsCard from './dashboard/polls/PollsCard';
 import CheckUnderstanding from './dashboard/polls/CheckUnderstanding';
+import PollModal from './dashboard/polls/PollModal';
 import CreatePoll from './dashboard/polls/CreatePoll';
+import PollResult from './summary/polls/PollResult';
+// import PollResults from './dashboard/polls/PollResults';
 
-// import PollResults from './dashboard/PollResults';
-
-import { Poll, Presentation, Slide } from '../models';
+import { Confusion, Poll, PollResults, Presentation, Slide } from '../models';
 
 const dashboardStyles = {
   height: '100%',
   display: 'flex',
   justifyContent: 'space-between' as 'space-between',
   backgroundColor: 'rgba(255, 255, 255, 0.3)'
+};
+const darkScreen = {
+  position: 'absolute' as 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'black',
+  zIndex: 1,
+  opacity: 0.75
 };
 const colStyles = {
   display: 'flex',
@@ -55,11 +67,13 @@ interface Props {
   selectedPresentation?: Presentation;
 }
 interface State {
+  currentPollResults?: PollResults;
   pollModalOpen: boolean;
   pollRunning: boolean;
   userAuthorized: boolean;
   currentSlide: number;
   slides: Slide[];
+  confusions: Confusion[];
 }
 
 class Dashboard extends React.Component<Props, State> {
@@ -80,12 +94,29 @@ class Dashboard extends React.Component<Props, State> {
       pollRunning: false,
       currentSlide: -1,
       slides: props.selectedPresentation ? props.selectedPresentation.slides : [],
-      userAuthorized: false
+      userAuthorized: false,
+      confusions: []
     };
   }
 
   componentDidMount() {
     GoogleApi.setupApi(this.updateGoogleAuthStatus);
+    this.initConfusions();
+  }
+
+  initConfusions() {
+    const confusionsRef = api.getConfusionRef();
+    confusionsRef.on('child_added', (snapshot: any) => {
+      const confusion = snapshot.val();
+      const confusions = this.state.confusions.slice();
+      confusions.push({
+        student: confusion.student,
+        timestamp: new Date(confusion.timestamp * 1000),
+        slideNumber: confusion.slide_number,
+        comment: confusion.comment
+      });
+      this.setState({ confusions });
+    });
   }
 
   updateGoogleAuthStatus(isSignedIn: boolean) {
@@ -127,18 +158,47 @@ class Dashboard extends React.Component<Props, State> {
     this.setState({ pollModalOpen: false });
   }
 
-  startPoll(poll: Poll) {
+  closePoll(pollKey: string) {
+    api.closePoll(pollKey);
+    this.setState({
+      pollRunning: false
+    });
+  }
+
+  startPoll(poll: Poll, e: MouseEvent) {
+    e.stopPropagation();
     const pollKey = api.createPoll({
       ...poll,
       isActive: true,
       responses: []
     }).key;
-    this.setState({pollRunning: true});
+
+    this.setState({
+      currentPollResults: {
+        questionText: poll.questionText,
+        answers: poll.answers.map((answerText: string, i: number) => {
+          return {
+            answerText,
+            isCorrect: poll.correctAns[i],
+            numStudentResponses: 0
+          };
+        })
+      },
+      pollModalOpen: true,
+      pollRunning: true
+    });
+
+    setTimeout(() => this.closePoll(pollKey), poll.pollTime * 60 * 1000);
     api.getPollResponseRef(pollKey).on('child_added', this.onPollResponse.bind(this));
   }
 
   onPollResponse(snapshot: any) {
-    console.log(snapshot.val());
+    if (this.state.currentPollResults) {
+      const res = snapshot.val();
+      const currentPollResults = this.state.currentPollResults;
+      currentPollResults.answers[res].numStudentResponses++;
+      this.setState({ currentPollResults });
+    }
   }
 
   render() {
@@ -146,10 +206,21 @@ class Dashboard extends React.Component<Props, State> {
       <div style={{height: '100%'}}>
         {
           this.state.pollModalOpen ?
-            <CreatePoll startPoll={this.startPoll} /> :
+            <PollModal>
+              {
+                this.state.pollRunning && this.state.currentPollResults ?
+                  <PollResult poll={this.state.currentPollResults}
+                              isExpanded={true}
+                              togglePoll={() => {}}
+                              inModal={true} /> :
+                  <CreatePoll startPoll={this.startPoll} />
+              }
+            </PollModal> :
             ''
         }
-        <div style={{...dashboardStyles, opacity: this.state.pollModalOpen ? 0.75 : 1}} onClick={this.closePollModal} >
+        <div style={dashboardStyles} onClick={this.closePollModal} >
+          {this.state.pollModalOpen ? <div style={darkScreen} /> : ''}
+
           <div style={col1Styles}>
             <div style={currentSlideSectionStyles}>
               <PresentationViewerContainer selectedPresentation={this.props.selectedPresentation}
@@ -166,7 +237,12 @@ class Dashboard extends React.Component<Props, State> {
                                           endLecture={this.props.endLecture} />
             </div>
 
-            <div style={{...sectionStyles, height: '40.3%'}} />
+            <div style={{...sectionStyles, height: '40.3%'}}>
+              <ConfusionComments confusionComments={this.state.confusions
+                .filter((confusion: Confusion) => confusion.comment)
+                .map((confusion: Confusion) => confusion.comment)
+                .reverse()} />
+            </div>
           </div>
 
           <div style={col2Styles}>
@@ -179,7 +255,7 @@ class Dashboard extends React.Component<Props, State> {
             </div>
 
             <div style={{...sectionStyles, height: '17.9%'}}>
-              <ConfusedStudents currentSlide={this.state.currentSlide} />
+              <ConfusedStudents currentSlide={this.state.currentSlide} confusions={this.state.confusions} />
             </div>
 
             <div style={{...sectionStyles, height: '17.9%'}}>

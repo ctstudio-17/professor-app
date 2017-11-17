@@ -6,21 +6,12 @@ import PollAnswer from './PollAnswer';
 const clockIcon = require('../../../assets/clock-icon.svg');
 const notebookIcon = require('../../../assets/notebook.svg');
 
-const pollContainerStyles = {
-  width: '65%',
-  height: '65%',
-  position: 'absolute' as 'absolute',
-  top: '17.5%',
-  left: '17.5%',
-  zIndex: 1,
-  backgroundColor: 'white',
-  boxShadow: '2px 2px 4px 0 rgba(0, 0, 0, 0.5)',
-  border: 'solid 1px #e4e4e4',
+const containerStyles = {
+  height: '100%',
+  width: '100%',
   display: 'flex',
   flexDirection: 'column' as 'column',
-  justifyContent: 'space-between' as 'space-between',
-  padding: '30px',
-  boxSizing: 'border-box'
+  justifyContent: 'space-between' as 'space-between'
 };
 const headerRowStyles = {
   display: 'flex',
@@ -126,7 +117,7 @@ class CreatePoll extends React.Component<Props, State> {
 
   render() {
     return (
-      <div style={pollContainerStyles}>
+      <div style={containerStyles}>
         <div style={headerRowStyles}>
           <div style={{flexGrow: 1}}>
             Create a Poll or Quiz <img src={notebookIcon} style={{height: '100%', verticalAlign: 'text-top'}} />
@@ -168,7 +159,7 @@ class CreatePoll extends React.Component<Props, State> {
                   backgroundColor='#4f92ff'
                   textColor='white'
                   buttonText='Start Poll'
-                  handleButtonClick={() => this.props.startPoll(this.state)} />
+                  handleButtonClick={() => this.props.startPoll(this.state, event)} />
         </div>
       </div>
     );

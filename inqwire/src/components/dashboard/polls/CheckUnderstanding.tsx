@@ -33,13 +33,13 @@ class CheckUnderstanding extends React.Component<Props, {}> {
     this.checkUnderstanding = this.checkUnderstanding.bind(this);
   }
 
-  checkUnderstanding() {
+  checkUnderstanding(e: any) {
     this.props.startPoll({
       pollTime: 1,
       questionText: 'Do you understand?',
       answers: ['Yes', 'No'],
       correctAns: [false, false]
-    });
+    }, e);
   }
 
   render() {

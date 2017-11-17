@@ -229,10 +229,10 @@ class PresentationViewer extends React.Component<Props, State> {
 
         <div style={bottomRowStyles}>
           <div style={slideCounterStyles}>
-            <div style={{...leftArrowStyles, cursor: this.props.currentSlide <= 0 ? 'not-allowed' : 'pointer'}}
+            <div style={{...leftArrowStyles, visibility: this.props.currentSlide <= 0 ? 'hidden' : 'visible'}}
                 onClick={() => this.setPage(this.props.currentSlide - 1)} />
             <div>{this.props.currentSlide + 1} of {this.state.totalSlides}</div>
-            <div style={{...rightArrowStyles, cursor: this.props.currentSlide + 1 >= this.state.totalSlides ? 'not-allowed' : 'pointer'}}
+            <div style={{...rightArrowStyles, visibility: this.props.currentSlide + 1 >= this.state.totalSlides ? 'hidden' : 'visible'}}
                 onClick={() => this.setPage(this.props.currentSlide + 1)} />
           </div>
 
