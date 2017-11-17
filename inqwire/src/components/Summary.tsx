@@ -64,6 +64,7 @@ class Summary extends React.Component<Props, State> {
 
   componentDidMount() {
     api.getPollsRef().once('value', (snapshot: any) => {
+      if (!snapshot.val()) { return; }
       const polls = (Object as any).values(snapshot.val()).map((poll: Poll) => {
         return {
           questionText: poll.questionText,

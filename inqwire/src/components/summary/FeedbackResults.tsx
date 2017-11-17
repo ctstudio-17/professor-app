@@ -37,12 +37,6 @@ const titleTextStyles = {
   fontWeight: 'bold' as 'bold',
   letterSpacing: '1px'
 };
-// const listStyles = {
-//   'background-color': 'rgba(255,255,255,0.4)',
-// }
-// const listItemStyles = {
-//   color: 'black',
-// }
 
 interface Props {
   feedback: string[];
@@ -65,7 +59,7 @@ class FeedbackResults extends React.Component<Props, {}> {
       <div style={{...boxStyles, width: '71.2%', padding: '20px'}}>
         <ul id='feedback-list'>
           {
-            this.props.feedback.map((s: string, i: number) => s ? <li key={i}><div style={{display: 'inline-block', height: '8px', width: '8px', 'border-radius': '50%', 'background-color': '#cecece', 'margin-right': '15px'}}></div>{s}</li> : '')
+            this.props.feedback.map((s: string, i: number) => s ? <li key={i}><div style={{display: 'inline-block', height: '8px', width: '8px', borderRadius: '50%', backgroundColor: '#cecece', marginRight: '15px'}}></div>{s}</li> : '')
           }
         </ul>
       </div>
