@@ -28,3 +28,14 @@ body {
 input:focus {
   outline: none;
 }
+
+
+#feedback-list {
+  list-style: none;
+  padding: 0px;
+  margin: 0;
+}
+
+#feedback-list li {
+  padding-left: 1em; 
+}
