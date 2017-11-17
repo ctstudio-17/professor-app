@@ -69,11 +69,13 @@ class FirebaseApi {
     this.fire.database().ref(`${this.lecturePath()}/polls/${pollKey}`).update({ isActive: false })
 
   getConfusionRef = () =>
-    this.fire.database().ref(`${this.lecturePath()}/confusions`)   
+    this.fire.database().ref(`${this.lecturePath()}/confusions`)
   getFeedbackRef = () =>
     this.fire.database().ref(`${this.lecturePath()}/feedback`)
   getPollResponseRef = (key: string) =>
     this.fire.database().ref(`${this.lecturePath()}/polls/${key}/responses`)
+  getPollsRef = () =>
+    this.fire.database().ref(`${this.lecturePath()}/polls`)
 }
 
 function initApi() {
