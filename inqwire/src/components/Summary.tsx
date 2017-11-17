@@ -19,14 +19,14 @@ const icons = {
   mailbox: require('../assets/mailbox.svg')
 };
 
+const containerStyles = {
+  display: 'flex',
+  flexDirection: 'column' as 'column'
+};
 const rowStyles = {
   display: 'flex',
   justifyContent: 'space-between' as 'space-between',
   marginBottom: '20px'
-};
-const colStyles = {
-  display: 'flex',
-  flexDirection: 'column' as 'column'
 };
 const greetingBarStyles = {
   margin: '-1.5% -1.5% 20px',
@@ -83,7 +83,7 @@ class Summary extends React.Component<Props, State> {
 
   render() {
     return (
-      <div style={colStyles}>
+      <div style={containerStyles}>
         {
           this.state.showGreeting ?
             <div style={greetingBarStyles}>

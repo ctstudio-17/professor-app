@@ -1,15 +1,10 @@
 import * as React from 'react';
-import * as GoogleApi from '../shared/GoogleApiInterface';
-import { Presentation } from '../../models';
+import * as GoogleApi from '../../shared/GoogleApiInterface';
+import { Presentation } from '../../../models';
 
 const containerStyles = {
-  backgroundColor: 'var(--white)',
   textAlign: 'center',
-  border: `solid 7px var(--lavender-blue)`,
-  position: 'relative' as 'relative',
-  width: '100%',
   height: '100%',
-  boxSizing: 'border-box',
   display: 'flex',
   flexDirection: 'column' as 'column'
 };

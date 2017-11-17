@@ -53,18 +53,20 @@ class FirebaseApi {
     this.fire.database().ref(`${this.lecturePath()}`).update({ presentation })
   closePresentation = () =>
     this.fire.database().ref(`${this.lecturePath()}/presentation`).remove()
-  setSlides = (id: string, slides: Slide[]) =>
+  setSlides = (slides: Slide[]) =>
     this.fire.database().ref(`${this.lecturePath()}/presentation`).update({ slides })
   setCurrentSlide = (page: number) =>
     this.fire.database().ref(`${this.lecturePath()}/presentation`).update({ currentPage: page })
   setSlideThumbnail = (page: number, url: string) => {
     if (this.classId !== undefined && this.lectureId !== undefined) {
-      this.fire.database().ref(`${this.lecturePath()}/presentation/slides/${page}`).update({thumbnailUrl: url});
+      this.fire.database().ref(`${this.lecturePath()}/presentation/slides/${page}`).update({ thumbnailUrl: url });
     }
   }
 
   createPoll = (poll: Poll) =>
     this.fire.database().ref(`${this.lecturePath()}/polls`).push(poll)
+  closePoll = (pollKey: string) =>
+    this.fire.database().ref(`${this.lecturePath()}/polls/${pollKey}`).update({ isActive: false })
 
   getConfusionRef = () =>
     this.fire.database().ref(`${this.lecturePath()}/confusions`)   

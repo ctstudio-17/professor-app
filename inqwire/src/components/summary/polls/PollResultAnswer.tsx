@@ -26,18 +26,19 @@ const barStyles = {
 };
 
 interface Props {
+  withMargin: boolean;
   answer: PollAnswer;
   barWidth: number;
 }
 
 class PollResultAnswer extends React.Component<Props, {}> {
   shouldComponentUpdate() {
-    return false;
+    return !this.props.withMargin;
   }
 
   render() {
     return (
-      <div style={containerStyles}>
+      <div style={{...containerStyles, margin: this.props.withMargin ? containerStyles.margin : '0'}}>
         <div style={{...answerTextStyles, color: this.props.answer.isCorrect ? '#4f92ff' : 'black'}}>
           {this.props.answer.answerText}
         </div>

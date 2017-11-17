@@ -1,35 +1,29 @@
 import * as React from 'react';
 
-import Button from '../shared/Button';
+import Button from '../../shared/Button';
 import PollAnswer from './PollAnswer';
 
-const clockIcon = require('../../assets/clock-icon.svg');
-const understandingPoll = {
-  pollTime: 1,
-  questionText: 'Do you understand?',
-  answers: ['Yes', 'No', '', ''],
-  correctAns: [false, false, false, false]
-};
+const clockIcon = require('../../../assets/clock-icon.svg');
+const notebookIcon = require('../../../assets/notebook.svg');
 
-const pollContainerStyles = {
-  width: '100%',
+const containerStyles = {
   height: '100%',
+  width: '100%',
   display: 'flex',
   flexDirection: 'column' as 'column',
   justifyContent: 'space-between' as 'space-between'
 };
 const headerRowStyles = {
   display: 'flex',
-  fontSize: '16px',
-  letterSpacing: '2px',
+  fontSize: '25px',
+  fontWeight: 'bold' as 'bold',
+  letterSpacing: '0.9px',
   justifyContent: 'space-between' as 'space-between',
-  height: '3.5%'
+  height: '25px'
 };
 const timeContainerStyles = {
-  color: 'var(--lavender-blue)',
-  borderBottom: 'solid 1px var(--lavender-blue)',
+  borderBottom: 'solid 1px black',
   display: 'inline-block',
-  boxSizing: 'border-box',
   height: '100%',
   marginLeft: '8px'
 };
@@ -40,8 +34,10 @@ const imgStyles = {
 const numInputStyles = {
   border: 'none',
   padding: '0',
-  width: '10px',
-  font: 'inherit'
+  width: '15px',
+  font: 'inherit',
+  height: '100%',
+  verticalAlign: 'text-top'
 };
 const inputStyles = {
   border: 'none',
@@ -74,7 +70,6 @@ class CreatePoll extends React.Component<Props, State> {
     this.updateQuestionText = this.updateQuestionText.bind(this);
     this.updatePollTime = this.updatePollTime.bind(this);
     this.addAnotherAnswer = this.addAnotherAnswer.bind(this);
-    this.checkUnderstanding = this.checkUnderstanding.bind(this);
     const numDefaultQues = 4;
     this.state = {
       pollTime: 1,
@@ -119,17 +114,16 @@ class CreatePoll extends React.Component<Props, State> {
       correctAns: correctAns
     });
   }
-  checkUnderstanding() {
-    this.setState(understandingPoll);
-    this.props.startPoll(understandingPoll);
-  }
 
   render() {
     return (
-      <div style={pollContainerStyles}>
+      <div style={containerStyles}>
         <div style={headerRowStyles}>
-          <div>POLLS & QUIZZES</div>
-          <div>
+          <div style={{flexGrow: 1}}>
+            Create a Poll or Quiz <img src={notebookIcon} style={{height: '100%', verticalAlign: 'text-top'}} />
+          </div>
+
+          <div style={{flexGrow: 1, textAlign: 'right'}}>
             <img src={clockIcon} style={imgStyles}/>
             <div style={timeContainerStyles}>
               <input style={numInputStyles} size={1} type='text' value={this.state.pollTime} onChange={this.updatePollTime} /> MIN
@@ -138,16 +132,15 @@ class CreatePoll extends React.Component<Props, State> {
         </div>
 
         <div>
-          <input type='text' placeholder='Type a question...' style={inputStyles}
+          <input type='text' placeholder='Type your question *' style={inputStyles}
                  value={this.state.questionText} onChange={this.updateQuestionText} />
         </div>
 
-        <div style={{height: '2px', width: '100%', backgroundColor: 'black'}} />
+        <div style={{height: '2px', width: '100%', backgroundColor: '#424242'}} />
 
         <div style={answerContainerStyles}>
           {
             this.state.answers.map((answerText, i) => <PollAnswer key={i}
-                                                                  letter={String.fromCharCode(65 + i)}
                                                                   answerText={answerText}
                                                                   isCorrect={this.state.correctAns[i]}
                                                                   setAnswerText={this.updateAnswerText.bind(this, i = i)}
@@ -157,26 +150,16 @@ class CreatePoll extends React.Component<Props, State> {
 
         <div style={{...answerContainerStyles, height: '19.2%'}}>
           <Button height='41.5%'
-                  backgroundColor='#e7e7e7'
-                  textColor='#5f5f5f'
-                  buttonText='ADD ANOTHER ANSWER'
+                  backgroundColor='inherit'
+                  textColor='#4f92ff'
+                  border='solid 2px #4f92ff'
+                  buttonText='Add Another Answer'
                   handleButtonClick={this.addAnotherAnswer} />
           <Button height='41.5%'
-                  backgroundColor='#bbbbbb'
-                  textColor='#ffffff'
-                  buttonText={'START POLL'}
-                  handleButtonClick={() => this.props.startPoll(this.state)} />
-        </div>
-
-        <div style={{height: '1px', width: '100%', backgroundColor: 'black'}} />
-
-        <div style={{...answerContainerStyles, height: '13.7%'}}>
-          <div>COMPREHENSION POLL</div>
-          <Button height='57.3%'
-                  backgroundColor='var(--lavender-blue)'
-                  textColor='#ffffff'
-                  buttonText='CHECK UNDERSTANDING'
-                  handleButtonClick={this.checkUnderstanding} />
+                  backgroundColor='#4f92ff'
+                  textColor='white'
+                  buttonText='Start Poll'
+                  handleButtonClick={() => this.props.startPoll(this.state, event)} />
         </div>
       </div>
     );

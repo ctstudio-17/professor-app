@@ -1,140 +1,38 @@
 import * as React from 'react';
-import '../../styles/animations.css';
 
+const icon = require('../../assets/stop-icon.png');
 const containerStyles = {
-  height: '100%',
   width: '100%',
-  boxSizing: 'border-box',
-  backgroundColor: '#e7e7e7',
-  textAlign: 'center',
-  padding: '2.3% 0',
-  color: '#5f5f5f',
-  cursor: 'pointer',
+  height: '100%',
+  border: 'solid 1px #585858',
+  borderRadius: '3px',
+  backgroundColor: '#2c2c2c',
+  color: 'white',
+  letterSpacing: '1.1px',
   display: 'flex',
-  flexDirection: 'column' as 'column',
-  justifyContent: 'space-between' as 'space-between',
-  position: 'relative' as 'relative'
-};
-const headerStyles = {
-  fontSize: '26px',
-  fontWeight: 'bold' as 'bold',
-  letterSpacing: '2px',
-  display: 'flex',
-  justifyContent: 'center' as 'center',
-  alignItems: 'center' as 'center'
-};
-const recordingContainerStyles = {
-  width: '17px',
-  height: '17px',
-  border: 'solid 1px red',
-  borderRadius: '50%',
-  marginRight: '1.1%',
-  position: 'relative' as 'relative'
-};
-const recordingBoxStyles = {
-  width: '50%',
-  height: '50%',
-  backgroundColor: 'red',
-  position: 'absolute' as 'absolute',
-  top: '25%',
-  left: '25%'
-};
-const subHeaderStyles = {
-  fontSize: '14px',
-  letterSpacing: '1.8px'
-};
-const timeContainerStyles = {
-  position: 'absolute' as 'absolute',
-  width: '5.8%',
-  height: '24.7%',
-  top: '9.9%',
-  right: '0.9%',
-  display: 'flex',
-  flexDirection: 'column' as 'column',
-  color: '#5f5f5f'
-};
-const timeStyles = {
-  fontSize: '14px',
-  fontWeight: 'bold' as 'bold',
-  letterSpacing: '1.8px'
-};
-const timeLabelStyles = {
-  fontSize: '7px',
-  letterSpacing: '1px',
-  display: 'flex',
-  justifyContent: 'space-between' as 'space-between'
+  alignItems: 'center' as 'center',
+  cursor: 'pointer'
 };
 
-const convertDateToSeconds = (date: Date) => parseInt(String(date.getTime() / 1000), 10);
+const textStyles = {
+  marginLeft: '8.3%',
+  fontSize: '30px',
+  fontWeight: 'bold' as 'bold',
+  letterSpacing: '1.1px',
+  height: '37.5%'
+};
 
 interface Props {
-  startTime?: Date;
   endLecture: any;
 }
-interface State {
-  intervalId: number;
-  minutes: number;
-  seconds: number;
-}
 
-class EndLecture extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    if (props.startTime) {
-      const passedTime = convertDateToSeconds(new Date()) - convertDateToSeconds(props.startTime);
-      this.state = {
-        intervalId: -1,
-        minutes: parseInt(String(passedTime / 60), 10),
-        seconds: passedTime % 60
-      };
-    } else {
-      this.state = {
-        intervalId: -1,
-        minutes: 0,
-        seconds: 0
-      };
-    }
-  }
-
-  updateTime() {
-    const minutes = this.state.minutes + Math.floor((this.state.seconds + 1) / 60);
-    this.setState({
-      minutes: minutes,
-      seconds: (this.state.seconds + 1) % 60
-    });
-  }
-
-  componentDidMount() {
-    const intervalId = setInterval(this.updateTime.bind(this), 1000);
-    this.setState({ intervalId });
-  }
-
+class EndLecture extends React.Component<Props, {}> {
   render() {
     return (
       <div style={containerStyles} onClick={this.props.endLecture}>
-        <div style={headerStyles}>
-          <div style={recordingContainerStyles}>
-            <div className='flash-animation' style={recordingBoxStyles} />
-          </div>
-          <div>Lecture In Progress</div>
-        </div>
-        <div style={subHeaderStyles}>CLICK TO END LECTURE</div>
-
-        <div style={timeContainerStyles}>
-          <div style={timeStyles}>
-            <span>{this.state.minutes < 10 ? '0' + this.state.minutes : this.state.minutes}</span>
-            <span>:</span>
-            <span>{('0' + this.state.seconds).slice(-2)}</span>
-          </div>
-          <div style={timeLabelStyles}><span>min</span><span>sec</span></div>
-        </div>
+        <div style={textStyles}>END LECTURE <img src={icon} style={{height: '100%', verticalAlign: 'text-top'}} /></div>
       </div>
     );
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.state.intervalId);
   }
 }
 
