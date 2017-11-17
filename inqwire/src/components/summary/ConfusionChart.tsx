@@ -66,54 +66,37 @@ const thumbnailStyles = {
   width: '11.1%'
 };
 
-interface Props {
-  presentationId: string;
-}
 interface State {
   confusedStudents: number[];
   topBarNum: number;
   thumbnails: string[];
 }
 
-class ConfusionChart extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-
-    // this.state = {
-    //   confusedStudents: [],
-    //   topBarNum: 0,
-    //   thumbnails: [],
-    // }
-  }
-
+class ConfusionChart extends React.Component<{}, State> {
   componentDidMount() {
     this.fetchConfusions();
   }
 
   fetchConfusions() {
-    var confusions: any[] = []
-    var confusedStudents: number[] = []
-    var slider_ids: number[] = []
-    var thumbnails: string[] = []
+    let confusions: any[] = [];
+    let confusedStudents: number[] = [];
+    let slider_ids: number[] = [];
+    const thumbnails: string[] = [];
     api.getConfusionRef().once('value').then((snapshot: any) => {
       if (snapshot.val() == null) { throw new Error('error'); }
-      confusions = Object.keys(snapshot.val()).map((key) => {return snapshot.val()[key]})
+      confusions = Object.keys(snapshot.val()).map((key) => snapshot.val()[key]);
       slider_ids = confusions.reduce((slides: number[], confusion: any) => {
-        if(slides.indexOf(confusion.slide_number) != -1){return slides}
+        if (slides.indexOf(confusion.slide_number) !== -1) { return slides; }
         return slides.concat(confusion.slide_number);
       }, []);
-      confusedStudents = Array(slider_ids.length).fill(0)
+      confusedStudents = Array(slider_ids.length).fill(0);
       confusions.forEach((confusion) => {
         confusedStudents[slider_ids.indexOf(confusion.slide_number)] += 1;
       });
     }).then(() => {
-      return api.getPresentationSlides()
-    }).then((sliders: any) => {
-      thumbnails = slider_ids.map((id) => {
-        return sliders.val()[id]['thumbnailUrl']
-      });
-      return thumbnails
-    }).then(() => {
+      return api.getPresentationSlides();
+    }).then((sliders: any) => slider_ids.map((id) => sliders.val()[id]['thumbnailUrl'])
+    ).then(() => {
       this.setState({
         confusedStudents: confusedStudents,
         topBarNum: Math.ceil(Math.max.apply(null, confusedStudents) / 5) * 5,
@@ -130,8 +113,8 @@ class ConfusionChart extends React.Component<Props, State> {
     if (!this.state) {
       return this.renderLoadingView();
     }
-    
-    if (this.state.confusedStudents.length == 0) {
+
+    if (this.state.confusedStudents.length === 0) {
       return this.renderNoData();
     }
 

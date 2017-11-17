@@ -8,8 +8,7 @@ import FeedbackResults from './summary/FeedbackResults';
 import ConfusionChart from './summary/ConfusionChart';
 import PollResultsContainer from './summary/polls/PollResultsContainer';
 
-import { Presentation } from '../models';
-import { pollResults } from '../mockdata/poll-results';
+import { Poll, PollResults, Presentation } from '../models';
 
 const icons = {
   ballot: require('../assets/ballot.svg'),
@@ -43,6 +42,7 @@ interface State {
   feedback: string[];
   scores: number[];
   levels: number[];
+  polls: PollResults[];
   showGreeting: boolean;
 }
 
@@ -53,12 +53,31 @@ class Summary extends React.Component<Props, State> {
     this.state = {
       feedback_number: 0,
       feedback: [],
-      scores: [0,0,0],
+      scores: [0, 0, 0],
       levels: [],
+      polls: [],
       showGreeting: true
     };
 
     api.getFeedbackRef().on('child_added', this.onFeedback.bind(this));
+  }
+
+  componentDidMount() {
+    api.getPollsRef().once('value', (snapshot: any) => {
+      const polls = (Object as any).values(snapshot.val()).map((poll: Poll) => {
+        return {
+          questionText: poll.questionText,
+          answers: poll.answers.map((answerText: string, i: number) => {
+            return {
+              answerText,
+              isCorrect: poll.correctAns[i],
+              numStudentResponses: poll.responses ? (Object as any).values(poll.responses).filter((ans: number) => ans === i).length : 0
+            };
+          })
+        };
+      });
+      this.setState({ polls });
+    });
   }
 
   closeGreeting() {
@@ -67,17 +86,17 @@ class Summary extends React.Component<Props, State> {
 
   onFeedback(snapshot: any) {
     const feedback_number = this.state.feedback_number + 1;
-    var feedbackObj: any = snapshot.val();
+    const feedbackObj: any = snapshot.val();
     const feedback = this.state.feedback.slice();
     feedback.push(feedbackObj.comments);
     const scores = this.state.scores.slice();
     const levels = this.state.levels.slice();
-    scores[0] = (scores[0]*(feedback_number-1) + feedbackObj.engagement)/feedback_number;
-    scores[1] = (scores[1]*(feedback_number-1) + feedbackObj.understanding)/feedback_number;
-    scores[2] = (scores[2]*(feedback_number-1) + feedbackObj.pace)/feedback_number;
-    levels[0] = scores[0]>=3.5 ? 2 : (scores[0]>=2.5 ? 1 :0); 
-    levels[1] = scores[1]>=3.5 ? 2 : (scores[1]>=2.5 ? 1 :0); 
-    levels[2] = scores[2]>=2.33 ? 2 : (scores[2]>=1.66 ? 1 :0); 
+    scores[0] = (scores[0] * (feedback_number - 1) + feedbackObj.engagement) / feedback_number;
+    scores[1] = (scores[1] * (feedback_number - 1) + feedbackObj.understanding) / feedback_number;
+    scores[2] = (scores[2] * (feedback_number - 1) + feedbackObj.pace) / feedback_number;
+    levels[0] = scores[0] >= 3.5 ? 2 : (scores[0] >= 2.5 ? 1 : 0);
+    levels[1] = scores[1] >= 3.5 ? 2 : (scores[1] >= 2.5 ? 1 : 0);
+    levels[2] = scores[2] >= 2.33 ? 2 : (scores[2] >= 1.66 ? 1 : 0);
     this.setState({ feedback_number, feedback, scores, levels });
   }
 
@@ -101,7 +120,7 @@ class Summary extends React.Component<Props, State> {
             <SummarySection title='Lecture Stats'
                             icon={icons.chart}
                             width='70.2%'>
-              <ConfusionChart presentationId={this.props.selectedPresentation.id} />
+              <ConfusionChart />
             </SummarySection> :
             'No presentation was selected'
           }
@@ -120,13 +139,17 @@ class Summary extends React.Component<Props, State> {
           </SummarySection>
         </div>
 
-        <div style={rowStyles}>
-          <SummarySection title='Polls & Quizzes'
-                          icon={icons.notebook}
-                          width='100%'>
-            <PollResultsContainer polls={pollResults} />
-          </SummarySection>
-        </div>
+        {
+          this.state.polls.length > 0 ?
+            <div style={rowStyles}>
+              <SummarySection title='Polls & Quizzes'
+                              icon={icons.notebook}
+                              width='100%'>
+                <PollResultsContainer polls={this.state.polls} />
+              </SummarySection>
+            </div> :
+            ''
+        }
       </div>
     );
   }
