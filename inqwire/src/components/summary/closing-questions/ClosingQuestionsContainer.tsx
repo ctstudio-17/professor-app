@@ -16,16 +16,16 @@ const icons = [
 ];
 
 const texts = [
-  'Students were not engaged in this lecture.',
-  'Students were moderately engaged in this lecture.',
-  'Students were engaged in this lecture.',
-  'Students did not understand in this lecture.',
-  'Students had an OK understaning.',
-  'Students had a good understanding in this lecture.',
-  'Students found this lecture to be too fast.',
-  'Students found this lecture to have a good pace.',
-  'Students found this lecture to be too slow',
-]
+  <span>Students were not <b>engaged</b> in this lecture.</span>,
+  <span>Students were moderately engaged in this lecture.</span>,
+  <span>Students were <b>engaged</b> in this lecture.</span>,
+  <span>Students did not understand in this lecture.</span>,
+  <span>Students had an OK understaning.</span>,
+  <span>Students had a good understanding in this lecture.</span>,
+  <span>Students found this lecture to be too fast.</span>,
+  <span>Students found this lecture to have a good pace.</span>,
+  <span>Students found this lecture to be too slow</span>
+];
 
 const containerStyles = {
   display: 'flex',
@@ -55,8 +55,8 @@ class ClosingQuestionsContainer extends React.Component<Props, {}> {
           {
             ['Lecture Engagement', 'Lecture Understanding', 'Lecture Pace'].map((s: string, i: number, arr: string[]) => {
               return <MetricOverview key={i}
-                                     icon={icons[i*3+this.props.levels[i]]}
-                                     text={texts[i*3+this.props.levels[i]]}
+                                     icon={icons[i * 3 + this.props.levels[i]]}
+                                     text={texts[i * 3 + this.props.levels[i]]}
                                      title={s}
                                      isLast={i === arr.length - 1} />;
             })

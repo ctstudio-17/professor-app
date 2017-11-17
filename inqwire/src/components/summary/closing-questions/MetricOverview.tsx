@@ -8,7 +8,7 @@ const containerStyles = {
 };
 const iconStyles = {
   height: '34px',
-  margin: '4% 7.5%',
+  margin: '0 7.5%',
 };
 const textStyles = {
   display: 'flex',
@@ -26,7 +26,7 @@ const numStudentsStyles = {
 interface Props {
   icon: string;
   title: string;
-  text: string;
+  text: any;
   isLast: boolean;
 }
 

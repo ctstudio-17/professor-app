@@ -65,7 +65,7 @@ class FeedbackResults extends React.Component<Props, {}> {
       <div style={{...boxStyles, width: '71.2%', padding: '20px'}}>
         <ul id='feedback-list'>
           {
-            this.props.feedback.map((s: string, i: number) => s ? <li><div style={{display: 'inline-block', height: '8px', width: '8px', 'border-radius': '50%', 'background-color': '#cecece', 'margin-right': '15px'}}></div>{s}</li> : '')
+            this.props.feedback.map((s: string, i: number) => s ? <li key={i}><div style={{display: 'inline-block', height: '8px', width: '8px', 'border-radius': '50%', 'background-color': '#cecece', 'margin-right': '15px'}}></div>{s}</li> : '')
           }
         </ul>
       </div>
