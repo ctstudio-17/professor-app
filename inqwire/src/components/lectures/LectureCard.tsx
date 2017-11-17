@@ -14,7 +14,7 @@ const containerStyles = {
 
 const parseTime = (date: any) => {
   const a = date.getHours() >= 12 ? 'PM' : 'AM';
-  return `${date.getHours() === 12 ? 12 : date.getHours() % 12}:${date.getMinutes()}${a}`;
+  return `${date.getHours() === 12 ? 12 : date.getHours() % 12}:${(String(date.getMinutes()) as any).padStart(2, '0')}${a}`;
 };
 
 interface Props {
