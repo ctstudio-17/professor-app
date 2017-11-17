@@ -12,8 +12,15 @@ const understandingPoll = {
 };
 
 const pollContainerStyles = {
-  width: '100%',
-  height: '100%',
+  width: '65%',
+  height: '65%',
+  position: 'absolute' as 'absolute',
+  top: '17.5%',
+  left: '17.5%',
+  zIndex: 1,
+  backgroundColor: 'white',
+  boxShadow: '2px 2px 4px 0 rgba(0, 0, 0, 0.5)',
+  border: 'solid 1px #e4e4e4',
   display: 'flex',
   flexDirection: 'column' as 'column',
   justifyContent: 'space-between' as 'space-between'

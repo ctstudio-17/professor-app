@@ -3,5 +3,6 @@ export interface Poll {
   correctAns: boolean[];
   pollTime: number;
   questionText: string;
+  isActive: boolean;
   responses: number[];
 }

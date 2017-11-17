@@ -24,6 +24,7 @@ interface Props {
   updateSlide: any;
   handleAuthClick: any;
   selectPresentation: any;
+  endLecture: any;
 }
 
 class PresentationViewerContainer extends React.Component<Props, {}> {
@@ -40,7 +41,8 @@ class PresentationViewerContainer extends React.Component<Props, {}> {
                                 closePresentation={this.props.closePresentation}
                                 setSlides={this.props.setSlides}
                                 updateSlideThumbnail={this.props.updateSlideThumbnail}
-                                updateSlide={this.props.updateSlide} /> :
+                                updateSlide={this.props.updateSlide}
+                                endLecture={this.props.endLecture} /> :
             <GoogleSlidesPicker logOutGoogleAuth={this.props.handleAuthClick} selectPresentation={this.props.selectPresentation} />) :
           <Button height='10%'
                   backgroundColor='black'

@@ -22,15 +22,20 @@ const headerStyles = {
   fontSize: '14px',
   letterSpacing: '0.9px'
 };
+const bottomRowStyles = {
+  display: 'flex',
+  justifyContent: 'space-between' as 'space-between',
+  height: '6.4%'
+};
 const slideCounterStyles = {
   width: '23.5%',
-  height: '6.4%',
-  margin: '0 auto',
+  height: '100%',
   border: 'solid 2px #565555',
   borderRadius: '17.5px',
   display: 'flex',
   justifyContent: 'space-evenly' as 'space-evenly',
   alignItems: 'center' as 'center',
+  marginLeft: '38.25%',
   fontSize: '14px',
   letterSpacing: '0.9px',
   color: 'white'
@@ -48,6 +53,20 @@ const rightArrowStyles = {
   ...arrowStyles,
   borderLeft: '10px solid white'
 };
+const endLectureButtonStyles = {
+  width: '20%',
+  height: '100%',
+  backgroundColor: 'rgba(244, 51, 72, 0.17)',
+  border: 'solid 2px #f43333',
+  borderRadius: '17.5px',
+  fontSize: '14px',
+  letterSpacing: '0.9px',
+  color: '#f43333',
+  display: 'flex',
+  justifyContent: 'center' as 'center',
+  alignItems: 'center' as 'center',
+  cursor: 'pointer'
+};
 
 const convertDateToSeconds = (date: Date) => parseInt(String(date.getTime() / 1000), 10);
 
@@ -59,6 +78,7 @@ interface Props {
   setSlides: any;
   updateSlideThumbnail: any;
   updateSlide: any;
+  endLecture: any;
 
   startTime?: Date;
 }
@@ -207,12 +227,18 @@ class PresentationViewer extends React.Component<Props, State> {
 
         <SlidePreview slideSrc={this.state.currentSlideImgSrc} height='85%' />
 
-        <div style={slideCounterStyles}>
-          <div style={{...leftArrowStyles, cursor: this.props.currentSlide <= 0 ? 'not-allowed' : 'pointer'}}
-               onClick={() => this.setPage(this.props.currentSlide - 1)} />
-          <div>{this.props.currentSlide + 1} of {this.state.totalSlides}</div>
-          <div style={{...rightArrowStyles, cursor: this.props.currentSlide + 1 >= this.state.totalSlides ? 'not-allowed' : 'pointer'}}
-               onClick={() => this.setPage(this.props.currentSlide + 1)} />
+        <div style={bottomRowStyles}>
+          <div style={slideCounterStyles}>
+            <div style={{...leftArrowStyles, cursor: this.props.currentSlide <= 0 ? 'not-allowed' : 'pointer'}}
+                onClick={() => this.setPage(this.props.currentSlide - 1)} />
+            <div>{this.props.currentSlide + 1} of {this.state.totalSlides}</div>
+            <div style={{...rightArrowStyles, cursor: this.props.currentSlide + 1 >= this.state.totalSlides ? 'not-allowed' : 'pointer'}}
+                onClick={() => this.setPage(this.props.currentSlide + 1)} />
+          </div>
+
+          <div style={endLectureButtonStyles} onClick={this.props.endLecture}>
+            End Lecture
+          </div>
         </div>
       </div>
     );

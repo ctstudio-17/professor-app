@@ -6,8 +6,9 @@ import PresentationViewerContainer from './dashboard/presentation/PresentationVi
 import NextSlide from './dashboard/presentation/NextSlide';
 import ConfusedStudents from './dashboard/ConfusedStudents';
 import PollsCard from './dashboard/polls/PollsCard';
+import CheckUnderstanding from './dashboard/polls/CheckUnderstanding';
 import CreatePoll from './dashboard/polls/CreatePoll';
-import EndLecture from './dashboard/EndLecture';
+
 // import PollResults from './dashboard/PollResults';
 
 import { Poll, Presentation, Slide } from '../models';
@@ -123,6 +124,7 @@ class Dashboard extends React.Component<Props, State> {
   startPoll(poll: Poll) {
     const pollKey = api.createPoll({
       ...poll,
+      isActive: true,
       responses: []
     }).key;
     this.setState({pollRunning: true});
@@ -153,7 +155,8 @@ class Dashboard extends React.Component<Props, State> {
                                          setSlides={this.setSlides}
                                          updateSlideThumbnail={this.updateSlideThumbnail}
                                          updateSlide={this.updateSlide}
-                                         handleAuthClick={this.handleAuthClick} />
+                                         handleAuthClick={this.handleAuthClick}
+                                         endLecture={this.props.endLecture} />
           </div>
           <div style={{...sectionStyles, height: '40.3%'}} />
         </div>
@@ -162,7 +165,7 @@ class Dashboard extends React.Component<Props, State> {
           <div style={{...sectionStyles, height: '27.2%'}}>
           {
             this.props.selectedPresentation ?
-              <NextSlide slideSrc={this.state.slides && this.state.currentSlide >= 0 ? this.state.slides[this.state.currentSlide + 1].thumbnailUrl : 'last'} /> :
+              <NextSlide slideSrc={this.state.slides && this.state.currentSlide >= 0 && this.state.currentSlide < this.state.slides.length - 1 ? this.state.slides[this.state.currentSlide + 1].thumbnailUrl : 'last'} /> :
               ''
           }
           </div>
@@ -176,24 +179,9 @@ class Dashboard extends React.Component<Props, State> {
           </div>
 
           <div style={{...sectionStyles, height: '11.1%'}}>
-            <EndLecture endLecture={this.props.endLecture} />
+            <CheckUnderstanding startPoll={this.startPoll} />
           </div>
         </div>
-
-
-
-
-        {/* <div style={{...rowStyles, height: '89.7%'}}>
-          <div style={pollContainerStyles}>
-            {this.state.pollRunning ? <PollResults /> : <CreatePoll startPoll={this.startPoll} />}
-          </div>
-          <div style={colStyles}>
-            <div style={{height: '12.0%'}}>
-              <EndLecture endLecture={this.props.endLecture} startTime={this.props.startTime} />
-            </div>
-          </div>
-        </div>
-        <div style={rowStyles} /> */}
       </div>
     );
   }

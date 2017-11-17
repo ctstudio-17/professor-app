@@ -41,7 +41,7 @@ interface Props {
 class CreatePoll extends React.Component<Props, {}> {
   render() {
     return (
-      <div style={containerStyles}>
+      <div style={containerStyles} onClick={this.props.openPoll}>
         <div style={contentStyles}>
           <div style={titleStyles}>Polls & Quizzes <img src={icon} style={imgStyles} /></div>
           <div style={subTextStyles}>Send a quick poll or quiz out to your class to check their comprehension.</div>
