@@ -5,6 +5,7 @@
   "dependencies": {
     "firebase": "^4.5.1",
     "react": "^16.0.0",
+    "react-countdown-clock": "^2.0.0",
     "react-dom": "^16.0.0",
     "react-scripts-ts": "2.7.0"
   },
